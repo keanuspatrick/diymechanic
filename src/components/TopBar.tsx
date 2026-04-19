@@ -22,7 +22,7 @@ export default function TopBar() {
       <div className="mx-auto flex h-14 max-w-3xl items-center justify-between px-5">
         <Link to="/dashboard" className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg gradient-primary shadow-bold">
-            <Wrench className="h-4 w-4 text-primary-foreground" />
+            <Wrench className="h-4 w-4 origin-center animate-wrench-turn text-primary-foreground" />
           </div>
           <span className="font-display text-lg tracking-wide">MyMechanic</span>
         </Link>
