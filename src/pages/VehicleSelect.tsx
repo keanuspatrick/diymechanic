@@ -45,7 +45,7 @@ export default function VehicleSelect() {
           <div className="flex h-11 w-11 items-center justify-center rounded-xl gradient-primary shadow-bold">
             <Wrench className="h-6 w-6 origin-center animate-wrench-turn" />
           </div>
-          <div className="font-display text-2xl tracking-wide text-background">MyMechanic</div>
+          <div className="font-display text-2xl tracking-wide text-background">DIYMechanic</div>
         </div>
 
         <div className="flex-1 flex flex-col justify-center">

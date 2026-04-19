@@ -1,6 +1,6 @@
 {
-  "name": "MyMechanic",
-  "short_name": "MyMechanic",
+  "name": "DIYMechanic",
+  "short_name": "DIYMechanic",
   "description": "Step-by-step DIY vehicle repair, install and mod guides with a real-time AI mechanic.",
   "start_url": "/",
   "scope": "/",
