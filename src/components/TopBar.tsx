@@ -24,7 +24,7 @@ export default function TopBar() {
           <div className="flex h-8 w-8 items-center justify-center rounded-lg gradient-primary shadow-bold">
             <Wrench className="h-4 w-4 origin-center animate-wrench-turn text-primary-foreground" />
           </div>
-          <span className="font-display text-lg tracking-wide">MyMechanic</span>
+          <span className="font-display text-lg tracking-wide">DIYMechanic</span>
         </Link>
 
         <DropdownMenu>
