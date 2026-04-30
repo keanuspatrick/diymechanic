@@ -104,4 +104,23 @@
   .shadow-bold { box-shadow: var(--shadow-bold); }
   .shadow-soft { box-shadow: var(--shadow-soft); }
   .shadow-deep { box-shadow: var(--shadow-deep); }
+
+  /* iOS safe-area helpers — clears Dynamic Island, notch, home indicator */
+  .pt-safe { padding-top: env(safe-area-inset-top); }
+  .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+  .pl-safe { padding-left: env(safe-area-inset-left); }
+  .pr-safe { padding-right: env(safe-area-inset-right); }
+  .px-safe {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+  .min-h-screen-safe {
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+}
+
+/* Lock the page so the browser status-bar background matches the app header */
+html, body {
+  background-color: hsl(var(--background));
 }

@@ -106,7 +106,11 @@ export default function ChatFab() {
         <button
           onClick={() => setOpen(true)}
           aria-label="Open AI mechanic chat"
-          className="fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full gradient-primary text-primary-foreground shadow-bold transition-transform hover:scale-105 active:scale-95"
+          style={{
+            bottom: "max(1.25rem, calc(env(safe-area-inset-bottom) + 0.75rem))",
+            right: "max(1.25rem, calc(env(safe-area-inset-right) + 0.75rem))",
+          }}
+          className="fixed z-50 flex h-14 w-14 items-center justify-center rounded-full gradient-primary text-primary-foreground shadow-bold transition-transform hover:scale-105 active:scale-95"
         >
           <MessageCircle className="h-6 w-6" />
         </button>
@@ -171,7 +175,7 @@ export default function ChatFab() {
               )}
             </div>
 
-            <div className="flex gap-2 border-t border-border bg-background p-3">
+            <div className="flex gap-2 border-t border-border bg-background p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
               <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}

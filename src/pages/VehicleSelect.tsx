@@ -30,7 +30,7 @@ export default function VehicleSelect() {
   };
 
   return (
-    <main className="min-h-screen relative overflow-hidden">
+    <main className="min-h-screen-safe relative overflow-hidden">
       <img
         src={heroImg}
         alt="Open hood with tools laid out in a warm-lit garage"
@@ -40,7 +40,7 @@ export default function VehicleSelect() {
       />
       <div className="absolute inset-0" style={{ background: "var(--gradient-hero)" }} />
 
-      <div className="relative z-10 mx-auto flex min-h-screen max-w-2xl flex-col px-5 pb-10 pt-14">
+      <div className="relative z-10 mx-auto flex min-h-screen-safe max-w-2xl flex-col px-5 px-safe pb-10 pt-14 pt-[max(3.5rem,calc(env(safe-area-inset-top)+1rem))] pb-[max(2.5rem,env(safe-area-inset-bottom))]">
         <div className="mb-10 flex items-center gap-3 text-primary-foreground">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl gradient-primary shadow-bold">
             <Wrench className="h-6 w-6 origin-center animate-wrench-turn" />
