@@ -18,8 +18,8 @@ export default function TopBar() {
   const clear = useVehicle((s) => s.clear);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur-md">
-      <div className="mx-auto flex h-14 max-w-3xl items-center justify-between px-5">
+    <header className="sticky top-0 z-40 border-b border-border bg-background/85 pt-safe backdrop-blur-md">
+      <div className="mx-auto flex h-14 max-w-3xl items-center justify-between px-5 pl-[max(1.25rem,env(safe-area-inset-left))] pr-[max(1.25rem,env(safe-area-inset-right))]">
         <Link to="/dashboard" className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg gradient-primary shadow-bold">
             <Wrench className="h-4 w-4 origin-center animate-wrench-turn text-primary-foreground" />
