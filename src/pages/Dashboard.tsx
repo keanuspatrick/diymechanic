@@ -23,9 +23,9 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen-safe bg-background">
       <TopBar />
-      <main className="mx-auto max-w-2xl px-5 pb-28 pt-6">
+      <main className="mx-auto max-w-2xl px-5 px-safe pb-[max(7rem,calc(env(safe-area-inset-bottom)+5rem))] pt-6">
         <div className="rounded-2xl gradient-dark p-5 text-background shadow-deep">
           <div className="text-xs font-bold uppercase tracking-widest text-primary">
             Working on

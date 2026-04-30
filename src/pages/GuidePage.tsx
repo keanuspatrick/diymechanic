@@ -62,9 +62,9 @@ export default function GuidePage() {
   }, [task, vehicle, navigate]);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen-safe bg-background">
       <TopBar />
-      <main className="mx-auto max-w-3xl px-5 pb-32 pt-4">
+      <main className="mx-auto max-w-3xl px-5 px-safe pb-[max(8rem,calc(env(safe-area-inset-bottom)+6rem))] pt-4">
         <Button
           variant="ghost"
           onClick={() => navigate(-1)}
