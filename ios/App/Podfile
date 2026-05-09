@@ -1,0 +1,14 @@
+platform :ios, '15.0'
+
+target 'App' do
+  use_frameworks!
+
+  # Capacitor Pods
+  pod 'Capacitor', :path => '../../node_modules/@capacitor/ios'
+  pod 'CapacitorCordova', :path => '../../node_modules/@capacitor/ios'
+
+  # Firebase Pods for GA4
+  pod 'FirebaseCore'
+  pod 'FirebaseAnalytics'
+
+end

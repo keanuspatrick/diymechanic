@@ -1,0 +1,41 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 6.2.3 effective-5.10 (swiftlang-6.2.3.3.21 clang-1700.6.3.2)
+// swift-module-flags: -target arm64-apple-tvos15.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -enable-experimental-feature DebugDescriptionMacro -enable-bare-slash-regex -module-name FirebaseDatabase
+// swift-module-flags-ignorable: -no-verify-emitted-module-interface -formal-cxx-interoperability-mode=off -interface-compiler-version 6.2.3
+@_exported import FirebaseDatabase
+import FirebaseSharedSwift
+import Foundation
+import Swift
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+extension FirebaseDatabase.DatabaseReference {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func setValue<T>(from value: T, encoder: FirebaseDatabase.Database.Encoder = Database.Encoder(), completion: (@Sendable ((any Swift.Error)?) -> Swift.Void)? = nil) throws where T : Swift.Encodable
+  #endif
+}
+extension FirebaseDatabase.DataSnapshot {
+  public func data<T>(as type: T.Type, decoder: FirebaseDatabase.Database.Decoder = Database.Decoder()) throws -> T where T : Swift.Decodable
+}
+extension FirebaseDatabase.Database {
+  public typealias Encoder = FirebaseSharedSwift.FirebaseDataEncoder
+  public typealias Decoder = FirebaseSharedSwift.FirebaseDataDecoder
+}
+@propertyWrapper public struct ServerTimestamp : Swift.Codable, Swift.Equatable, Swift.Hashable {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(wrappedValue value: Foundation.Date?)
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public var wrappedValue: Foundation.Date? {
+    get
+    set
+  }
+  #endif
+  public init(from decoder: any Swift.Decoder) throws
+  public func encode(to encoder: any Swift.Encoder) throws
+  public static func == (a: FirebaseDatabase.ServerTimestamp, b: FirebaseDatabase.ServerTimestamp) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}

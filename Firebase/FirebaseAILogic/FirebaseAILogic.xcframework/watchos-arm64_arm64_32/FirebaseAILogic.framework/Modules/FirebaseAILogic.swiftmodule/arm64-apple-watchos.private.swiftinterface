@@ -1,0 +1,1438 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 6.2.3 (swiftlang-6.2.3.3.21 clang-1700.6.3.2)
+// swift-module-flags: -target arm64-apple-watchos7.0 -enable-objc-interop -enable-library-evolution -swift-version 6 -enforce-exclusivity=checked -O -enable-experimental-feature DebugDescriptionMacro -module-name FirebaseAILogic
+// swift-module-flags-ignorable: -no-verify-emitted-module-interface -formal-cxx-interoperability-mode=off -interface-compiler-version 6.2.3
+import CoreLocation
+@_exported import FirebaseAILogic
+import FirebaseAppCheckInterop
+import FirebaseAuthInterop
+import FirebaseCore
+import Foundation
+import Swift
+import UIKit
+import UniformTypeIdentifiers
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+import os.log
+import os
+@available(watchOS, unavailable)
+public struct AudioTranscriptionConfig : Swift.Sendable {
+  public init()
+}
+public struct Backend {
+  public static func vertexAI(location: Swift.String = "us-central1") -> FirebaseAILogic.Backend
+  public static func googleAI() -> FirebaseAILogic.Backend
+}
+@_hasMissingDesignatedInitializers final public class Chat : Swift.Sendable {
+  final public var history: [FirebaseAILogic.ModelContent] {
+    get
+    set
+  }
+  final public func sendMessage(_ parts: any FirebaseAILogic.PartsRepresentable...) async throws -> FirebaseAILogic.GenerateContentResponse
+  final public func sendMessage(_ content: [FirebaseAILogic.ModelContent]) async throws -> FirebaseAILogic.GenerateContentResponse
+  @available(macOS 12.0, watchOS 8.0, *)
+  final public func sendMessageStream(_ parts: any FirebaseAILogic.PartsRepresentable...) throws -> _Concurrency.AsyncThrowingStream<FirebaseAILogic.GenerateContentResponse, any Swift.Error>
+  @available(macOS 12.0, watchOS 8.0, *)
+  final public func sendMessageStream(_ content: [FirebaseAILogic.ModelContent]) throws -> _Concurrency.AsyncThrowingStream<FirebaseAILogic.GenerateContentResponse, any Swift.Error>
+  @objc deinit
+}
+public struct CodeExecution : Swift.Sendable, Swift.Encodable {
+  public func encode(to encoder: any Swift.Encoder) throws
+}
+@available(watchOS, unavailable)
+public struct SlidingWindow : Swift.Sendable {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(targetTokens: Swift.Int? = nil)
+  #endif
+}
+@available(watchOS, unavailable)
+public struct ContextWindowCompressionConfig : Swift.Sendable {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(triggerTokens: Swift.Int? = nil, slidingWindow: FirebaseAILogic.SlidingWindow? = nil)
+  #endif
+}
+public struct CountTokensResponse : Swift.Sendable {
+  public let totalTokens: Swift.Int
+  public let promptTokensDetails: [FirebaseAILogic.ModalityTokenCount]
+}
+extension FirebaseAILogic.CountTokensResponse : Swift.Decodable {
+  public init(from decoder: any Swift.Decoder) throws
+}
+@_hasMissingDesignatedInitializers final public class FirebaseAI : Swift.Sendable {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public static func firebaseAI(app: FirebaseCore.FirebaseApp? = nil, backend: FirebaseAILogic.Backend = .googleAI(), useLimitedUseAppCheckTokens: Swift.Bool = false) -> FirebaseAILogic.FirebaseAI
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  final public func generativeModel(modelName: Swift.String, generationConfig: FirebaseAILogic.GenerationConfig? = nil, safetySettings: [FirebaseAILogic.SafetySetting]? = nil, tools: [FirebaseAILogic.Tool]? = nil, toolConfig: FirebaseAILogic.ToolConfig? = nil, systemInstruction: FirebaseAILogic.ModelContent? = nil, requestOptions: FirebaseAILogic.RequestOptions = RequestOptions()) -> FirebaseAILogic.GenerativeModel
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  final public func geminiModel(name: Swift.String, safetySettings: [FirebaseAILogic.SafetySetting]? = nil, requestOptions: FirebaseAILogic.RequestOptions = RequestOptions()) -> FirebaseAILogic.GeminiModel
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  final public func generativeModelSession(model: any FirebaseAILogic.LanguageModelProvider, tools: [any FirebaseAILogic.ToolRepresentable]? = nil, instructions: Swift.String? = nil) -> FirebaseAILogic.GenerativeModelSession
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @available(*, deprecated, message: "All Imagen models are deprecated and will shut down as early as June 2026. As a replacement, you can migrate your apps to use Gemini Image models (the \"Nano Banana\" models).")
+  final public func imagenModel(modelName: Swift.String, generationConfig: FirebaseAILogic.ImagenGenerationConfig? = nil, safetySettings: FirebaseAILogic.ImagenSafetySettings? = nil, requestOptions: FirebaseAILogic.RequestOptions = RequestOptions()) -> FirebaseAILogic.ImagenModel
+  #endif
+  final public func templateGenerativeModel() -> FirebaseAILogic.TemplateGenerativeModel
+  @available(*, deprecated, message: "All Imagen models are deprecated and will shut down as early as June 2026. As a replacement, you can migrate your apps to use Gemini Image models (the \"Nano Banana\" models).")
+  final public func templateImagenModel() -> FirebaseAILogic.TemplateImagenModel
+  #if compiler(>=5.3) && $NonescapableTypes
+  @available(watchOS, unavailable)
+  final public func liveModel(modelName: Swift.String, generationConfig: FirebaseAILogic.LiveGenerationConfig? = nil, tools: [FirebaseAILogic.Tool]? = nil, toolConfig: FirebaseAILogic.ToolConfig? = nil, systemInstruction: FirebaseAILogic.ModelContent? = nil, requestOptions: FirebaseAILogic.RequestOptions = RequestOptions()) -> FirebaseAILogic.LiveGenerativeModel
+  #endif
+  @objc deinit
+}
+public struct GeminiModel {
+}
+extension FirebaseAILogic.GeminiModel : FirebaseAILogic.LanguageModel {
+  public var _modelName: Swift.String {
+    get
+  }
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func _startSession(tools: [any FirebaseAILogic.ToolRepresentable]?, instructions: Swift.String?) throws -> any FirebaseAILogic._ModelSession
+  #endif
+}
+public struct GeminiModelProvider : FirebaseAILogic.LanguageModelProvider {
+  public func _languageModel(firebaseAI: FirebaseAILogic.FirebaseAI) -> any FirebaseAILogic.LanguageModel
+}
+public enum GenerateContentError : Swift.Error {
+  case internalError(underlying: any Swift.Error)
+  case promptImageContentError(underlying: any Swift.Error)
+  case promptBlocked(response: FirebaseAILogic.GenerateContentResponse)
+  case responseStoppedEarly(reason: FirebaseAILogic.FinishReason, response: FirebaseAILogic.GenerateContentResponse)
+}
+public struct GenerateContentResponse : Swift.Sendable {
+  public struct UsageMetadata : Swift.Sendable {
+    public let promptTokenCount: Swift.Int
+    public let cachedContentTokenCount: Swift.Int
+    public let candidatesTokenCount: Swift.Int
+    public let toolUsePromptTokenCount: Swift.Int
+    public let thoughtsTokenCount: Swift.Int
+    public let totalTokenCount: Swift.Int
+    public let promptTokensDetails: [FirebaseAILogic.ModalityTokenCount]
+    public let cacheTokensDetails: [FirebaseAILogic.ModalityTokenCount]
+    public let candidatesTokensDetails: [FirebaseAILogic.ModalityTokenCount]
+    public let toolUsePromptTokensDetails: [FirebaseAILogic.ModalityTokenCount]
+  }
+  public let candidates: [FirebaseAILogic.Candidate]
+  public let promptFeedback: FirebaseAILogic.PromptFeedback?
+  public let usageMetadata: FirebaseAILogic.GenerateContentResponse.UsageMetadata?
+  public let modelVersion: Swift.String
+  #if compiler(>=5.3) && $NonescapableTypes
+  public var text: Swift.String? {
+    get
+  }
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public var thoughtSummary: Swift.String? {
+    get
+  }
+  #endif
+  public var functionCalls: [FirebaseAILogic.FunctionCallPart] {
+    get
+  }
+  public var inlineDataParts: [FirebaseAILogic.InlineDataPart] {
+    get
+  }
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(candidates: [FirebaseAILogic.Candidate], promptFeedback: FirebaseAILogic.PromptFeedback? = nil, usageMetadata: FirebaseAILogic.GenerateContentResponse.UsageMetadata? = nil)
+  #endif
+}
+public struct Candidate : Swift.Sendable {
+  public let content: FirebaseAILogic.ModelContent
+  public let safetyRatings: [FirebaseAILogic.SafetyRating]
+  public let finishReason: FirebaseAILogic.FinishReason?
+  public let finishMessage: Swift.String?
+  public let citationMetadata: FirebaseAILogic.CitationMetadata?
+  public let groundingMetadata: FirebaseAILogic.GroundingMetadata?
+  public let urlContextMetadata: FirebaseAILogic.URLContextMetadata?
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(content: FirebaseAILogic.ModelContent, safetyRatings: [FirebaseAILogic.SafetyRating], finishReason: FirebaseAILogic.FinishReason?, citationMetadata: FirebaseAILogic.CitationMetadata?, groundingMetadata: FirebaseAILogic.GroundingMetadata? = nil, urlContextMetadata: FirebaseAILogic.URLContextMetadata? = nil, finishMessage: Swift.String? = nil)
+  #endif
+}
+public struct CitationMetadata : Swift.Sendable {
+  public let citations: [FirebaseAILogic.Citation]
+}
+public struct Citation : Swift.Sendable, Swift.Equatable {
+  public let startIndex: Swift.Int
+  public let endIndex: Swift.Int
+  public let uri: Swift.String?
+  public let title: Swift.String?
+  public let license: Swift.String?
+  public let publicationDate: Foundation.DateComponents?
+  public static func == (a: FirebaseAILogic.Citation, b: FirebaseAILogic.Citation) -> Swift.Bool
+}
+public struct FinishReason : Swift.Hashable, Swift.Sendable {
+  public static let stop: FirebaseAILogic.FinishReason
+  public static let maxTokens: FirebaseAILogic.FinishReason
+  public static let safety: FirebaseAILogic.FinishReason
+  public static let recitation: FirebaseAILogic.FinishReason
+  public static let other: FirebaseAILogic.FinishReason
+  public static let blocklist: FirebaseAILogic.FinishReason
+  public static let prohibitedContent: FirebaseAILogic.FinishReason
+  public static let spii: FirebaseAILogic.FinishReason
+  public static let malformedFunctionCall: FirebaseAILogic.FinishReason
+  public static let imageSafety: FirebaseAILogic.FinishReason
+  public static let imageProhibitedContent: FirebaseAILogic.FinishReason
+  public static let imageOther: FirebaseAILogic.FinishReason
+  public static let noImage: FirebaseAILogic.FinishReason
+  public static let imageRecitation: FirebaseAILogic.FinishReason
+  public static let language: FirebaseAILogic.FinishReason
+  public static let unexpectedToolCall: FirebaseAILogic.FinishReason
+  public static let tooManyToolCalls: FirebaseAILogic.FinishReason
+  public static let missingThoughtSignature: FirebaseAILogic.FinishReason
+  public static let malformedResponse: FirebaseAILogic.FinishReason
+  public let rawValue: Swift.String
+  public static func == (a: FirebaseAILogic.FinishReason, b: FirebaseAILogic.FinishReason) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public struct PromptFeedback : Swift.Sendable {
+  public struct BlockReason : Swift.Hashable, Swift.Sendable {
+    public static let safety: FirebaseAILogic.PromptFeedback.BlockReason
+    public static let other: FirebaseAILogic.PromptFeedback.BlockReason
+    public static let blocklist: FirebaseAILogic.PromptFeedback.BlockReason
+    public static let prohibitedContent: FirebaseAILogic.PromptFeedback.BlockReason
+    public let rawValue: Swift.String
+    public static func == (a: FirebaseAILogic.PromptFeedback.BlockReason, b: FirebaseAILogic.PromptFeedback.BlockReason) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public let blockReason: FirebaseAILogic.PromptFeedback.BlockReason?
+  public let blockReasonMessage: Swift.String?
+  public let safetyRatings: [FirebaseAILogic.SafetyRating]
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(blockReason: FirebaseAILogic.PromptFeedback.BlockReason?, blockReasonMessage: Swift.String? = nil, safetyRatings: [FirebaseAILogic.SafetyRating])
+  #endif
+}
+public struct GroundingMetadata : Swift.Sendable, Swift.Equatable, Swift.Hashable {
+  public let webSearchQueries: [Swift.String]
+  public let groundingChunks: [FirebaseAILogic.GroundingMetadata.GroundingChunk]
+  public let groundingSupports: [FirebaseAILogic.GroundingMetadata.GroundingSupport]
+  public let searchEntryPoint: FirebaseAILogic.GroundingMetadata.SearchEntryPoint?
+  public struct SearchEntryPoint : Swift.Sendable, Swift.Equatable, Swift.Hashable {
+    public let renderedContent: Swift.String
+    public static func == (a: FirebaseAILogic.GroundingMetadata.SearchEntryPoint, b: FirebaseAILogic.GroundingMetadata.SearchEntryPoint) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public struct GroundingChunk : Swift.Sendable, Swift.Equatable, Swift.Hashable {
+    public let web: FirebaseAILogic.GroundingMetadata.WebGroundingChunk?
+    public let maps: FirebaseAILogic.GoogleMapsGroundingChunk?
+    public static func == (a: FirebaseAILogic.GroundingMetadata.GroundingChunk, b: FirebaseAILogic.GroundingMetadata.GroundingChunk) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public struct WebGroundingChunk : Swift.Sendable, Swift.Equatable, Swift.Hashable {
+    public let uri: Swift.String?
+    public let title: Swift.String?
+    public let domain: Swift.String?
+    public static func == (a: FirebaseAILogic.GroundingMetadata.WebGroundingChunk, b: FirebaseAILogic.GroundingMetadata.WebGroundingChunk) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public struct GroundingSupport : Swift.Sendable, Swift.Equatable, Swift.Hashable {
+    public let segment: FirebaseAILogic.Segment
+    public let groundingChunkIndices: [Swift.Int]
+    public static func == (a: FirebaseAILogic.GroundingMetadata.GroundingSupport, b: FirebaseAILogic.GroundingMetadata.GroundingSupport) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public static func == (a: FirebaseAILogic.GroundingMetadata, b: FirebaseAILogic.GroundingMetadata) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public struct Segment : Swift.Sendable, Swift.Equatable, Swift.Hashable {
+  public let partIndex: Swift.Int
+  public let startIndex: Swift.Int
+  public let endIndex: Swift.Int
+  public let text: Swift.String
+  public static func == (a: FirebaseAILogic.Segment, b: FirebaseAILogic.Segment) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension FirebaseAILogic.GenerateContentResponse : Swift.Decodable {
+  public init(from decoder: any Swift.Decoder) throws
+}
+extension FirebaseAILogic.GenerateContentResponse.UsageMetadata : Swift.Decodable {
+  public init(from decoder: any Swift.Decoder) throws
+}
+extension FirebaseAILogic.Candidate : Swift.Decodable {
+  public init(from decoder: any Swift.Decoder) throws
+}
+extension FirebaseAILogic.CitationMetadata : Swift.Decodable {
+  public init(from decoder: any Swift.Decoder) throws
+}
+extension FirebaseAILogic.Citation : Swift.Decodable {
+  public init(from decoder: any Swift.Decoder) throws
+}
+extension FirebaseAILogic.PromptFeedback : Swift.Decodable {
+  public init(from decoder: any Swift.Decoder) throws
+}
+extension FirebaseAILogic.GroundingMetadata : Swift.Decodable {
+  public init(from decoder: any Swift.Decoder) throws
+}
+extension FirebaseAILogic.GroundingMetadata.SearchEntryPoint : Swift.Decodable {
+  public init(from decoder: any Swift.Decoder) throws
+}
+extension FirebaseAILogic.GroundingMetadata.GroundingChunk : Swift.Decodable {
+  public init(from decoder: any Swift.Decoder) throws
+}
+extension FirebaseAILogic.GroundingMetadata.WebGroundingChunk : Swift.Decodable {
+  public init(from decoder: any Swift.Decoder) throws
+}
+extension FirebaseAILogic.Segment : Swift.Decodable {
+  public init(from decoder: any Swift.Decoder) throws
+}
+extension FirebaseAILogic.FirebaseAI {
+  public struct GeneratedContent : Swift.Sendable {
+    public let kind: FirebaseAILogic.FirebaseAI.GeneratedContent.Kind
+    public let generationID: FirebaseAILogic.FirebaseAI.GenerationID?
+    public init(json: Swift.String) throws
+    public let isComplete: Swift.Bool
+  }
+}
+extension FirebaseAILogic.FirebaseAI.GeneratedContent {
+  public enum Kind : Swift.Sendable {
+    case null
+    case bool(Swift.Bool)
+    case number(Swift.Double)
+    case string(Swift.String)
+    case array([FirebaseAILogic.FirebaseAI.GeneratedContent])
+    case structure(properties: [Swift.String : FirebaseAILogic.FirebaseAI.GeneratedContent], orderedKeys: [Swift.String])
+  }
+}
+public struct GenerationConfig : Swift.Sendable, Swift.Equatable {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(temperature: Swift.Float? = nil, topP: Swift.Float? = nil, topK: Swift.Int? = nil, candidateCount: Swift.Int? = nil, maxOutputTokens: Swift.Int? = nil, presencePenalty: Swift.Float? = nil, frequencyPenalty: Swift.Float? = nil, stopSequences: [Swift.String]? = nil, responseMIMEType: Swift.String? = nil, responseSchema: FirebaseAILogic.Schema? = nil, responseModalities: [FirebaseAILogic.ResponseModality]? = nil, thinkingConfig: FirebaseAILogic.ThinkingConfig? = nil, imageConfig: FirebaseAILogic.ImageConfig? = nil)
+  #endif
+  public static func == (a: FirebaseAILogic.GenerationConfig, b: FirebaseAILogic.GenerationConfig) -> Swift.Bool
+}
+extension FirebaseAILogic.GenerationConfig : Swift.Encodable {
+  public func encode(to encoder: any Swift.Encoder) throws
+}
+extension FirebaseAILogic.FirebaseAI {
+  public struct GenerationID : Swift.Sendable {
+    public init()
+  }
+}
+extension FirebaseAILogic.FirebaseAI.GenerationID : Swift.Equatable {
+  public static func == (lhs: FirebaseAILogic.FirebaseAI.GenerationID, rhs: FirebaseAILogic.FirebaseAI.GenerationID) -> Swift.Bool
+}
+extension FirebaseAILogic.FirebaseAI.GenerationID : Swift.Hashable {
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension FirebaseAILogic.FirebaseAI {
+  public struct GenerationOptions : Swift.Sendable, Swift.Equatable {
+    public struct SamplingMode : Swift.Sendable, Swift.Equatable {
+      public static var greedy: FirebaseAILogic.FirebaseAI.GenerationOptions.SamplingMode {
+        get
+      }
+      #if compiler(>=5.3) && $NonescapableTypes
+      public static func random(top k: Swift.Int, seed: Swift.UInt64? = nil) -> FirebaseAILogic.FirebaseAI.GenerationOptions.SamplingMode
+      #endif
+      #if compiler(>=5.3) && $NonescapableTypes
+      public static func random(probabilityThreshold: Swift.Double, seed: Swift.UInt64? = nil) -> FirebaseAILogic.FirebaseAI.GenerationOptions.SamplingMode
+      #endif
+      public static func == (lhs: FirebaseAILogic.FirebaseAI.GenerationOptions.SamplingMode, rhs: FirebaseAILogic.FirebaseAI.GenerationOptions.SamplingMode) -> Swift.Bool
+    }
+    public var sampling: FirebaseAILogic.FirebaseAI.GenerationOptions.SamplingMode?
+    public var temperature: Swift.Double?
+    public var maximumResponseTokens: Swift.Int?
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init(sampling: FirebaseAILogic.FirebaseAI.GenerationOptions.SamplingMode? = nil, temperature: Swift.Double? = nil, maximumResponseTokens: Swift.Int? = nil)
+    #endif
+    public static func == (lhs: FirebaseAILogic.FirebaseAI.GenerationOptions, rhs: FirebaseAILogic.FirebaseAI.GenerationOptions) -> Swift.Bool
+  }
+}
+public protocol GenerationOptionsRepresentable : Swift.Sendable {
+  var responseGenerationOptions: FirebaseAILogic.ResponseGenerationOptions { get }
+}
+extension FirebaseAILogic.GenerationConfig : FirebaseAILogic.GenerationOptionsRepresentable {
+  public var responseGenerationOptions: FirebaseAILogic.ResponseGenerationOptions {
+    get
+  }
+}
+extension FirebaseAILogic.FirebaseAI.GenerationOptions : FirebaseAILogic.GenerationOptionsRepresentable {
+  public var responseGenerationOptions: FirebaseAILogic.ResponseGenerationOptions {
+    get
+  }
+}
+extension FirebaseAILogic.GenerationOptionsRepresentable where Self == FirebaseAILogic.ResponseGenerationOptions {
+  public static var `default`: FirebaseAILogic.ResponseGenerationOptions {
+    get
+  }
+  public static func gemini(_ generationConfig: FirebaseAILogic.GenerationConfig) -> FirebaseAILogic.ResponseGenerationOptions
+  public static func foundationModels(_ generationOptions: FirebaseAILogic.FirebaseAI.GenerationOptions) -> FirebaseAILogic.ResponseGenerationOptions
+  public static func hybrid(gemini: FirebaseAILogic.GenerationConfig, foundationModels: FirebaseAILogic.FirebaseAI.GenerationOptions) -> FirebaseAILogic.ResponseGenerationOptions
+}
+extension FirebaseAILogic.FirebaseAI {
+  public struct GenerationSchema : Swift.Sendable {
+  }
+}
+public struct RequestOptions : Swift.Sendable {
+  public init(timeout: Foundation.TimeInterval = 180.0)
+}
+extension FirebaseAILogic.RequestOptions : Swift.Equatable {
+  public static func == (a: FirebaseAILogic.RequestOptions, b: FirebaseAILogic.RequestOptions) -> Swift.Bool
+}
+@_hasMissingDesignatedInitializers final public class GenerativeModel : Swift.Sendable {
+  final public func generateContent(_ parts: any FirebaseAILogic.PartsRepresentable...) async throws -> FirebaseAILogic.GenerateContentResponse
+  final public func generateContent(_ content: [FirebaseAILogic.ModelContent]) async throws -> FirebaseAILogic.GenerateContentResponse
+  @available(macOS 12.0, watchOS 8.0, *)
+  final public func generateContentStream(_ parts: any FirebaseAILogic.PartsRepresentable...) throws -> _Concurrency.AsyncThrowingStream<FirebaseAILogic.GenerateContentResponse, any Swift.Error>
+  @available(macOS 12.0, watchOS 8.0, *)
+  final public func generateContentStream(_ content: [FirebaseAILogic.ModelContent]) throws -> _Concurrency.AsyncThrowingStream<FirebaseAILogic.GenerateContentResponse, any Swift.Error>
+  final public func startChat(history: [FirebaseAILogic.ModelContent] = []) -> FirebaseAILogic.Chat
+  final public func countTokens(_ parts: any FirebaseAILogic.PartsRepresentable...) async throws -> FirebaseAILogic.CountTokensResponse
+  final public func countTokens(_ content: [FirebaseAILogic.ModelContent]) async throws -> FirebaseAILogic.CountTokensResponse
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers final public class GenerativeModelSession : Swift.Sendable {
+  #if compiler(>=5.3) && $AsyncExecutionBehaviorAttributes
+  @discardableResult
+  nonisolated(nonsending) final public func respond(to prompt: any FirebaseAILogic.PartsRepresentable..., options: any FirebaseAILogic.GenerationOptionsRepresentable = ResponseGenerationOptions.default) async throws -> FirebaseAILogic.GenerativeModelSession.Response<Swift.String>
+  #endif
+  #if compiler(>=5.3) && $SendingArgsAndResults
+  @available(macOS 12.0, watchOS 8.0, *)
+  final public func streamResponse(to prompt: any FirebaseAILogic.PartsRepresentable..., options: any FirebaseAILogic.GenerationOptionsRepresentable = ResponseGenerationOptions.default) -> sending FirebaseAILogic.GenerativeModelSession.ResponseStream<Swift.String, Swift.String>
+  #else
+  @available(macOS 12.0, watchOS 8.0, *)
+  final public func streamResponse(to prompt: any FirebaseAILogic.PartsRepresentable..., options: any FirebaseAILogic.GenerationOptionsRepresentable = ResponseGenerationOptions.default) -> FirebaseAILogic.GenerativeModelSession.ResponseStream<Swift.String, Swift.String>
+  #endif
+  @objc deinit
+}
+extension FirebaseAILogic.GenerativeModelSession {
+  public struct Response<Content> {
+    public let content: Content
+    public let rawContent: FirebaseAILogic.FirebaseAI.GeneratedContent
+    public let rawResponse: FirebaseAILogic.GenerateContentResponse
+  }
+}
+extension FirebaseAILogic.GenerativeModelSession {
+  public struct ResponseStream<Content, PartialContent> : _Concurrency.AsyncSequence {
+    public typealias Element = FirebaseAILogic.GenerativeModelSession.ResponseStream<Content, PartialContent>.Snapshot
+    public struct Snapshot {
+      public let content: PartialContent
+      public let rawContent: FirebaseAILogic.FirebaseAI.GeneratedContent
+      public let rawResponse: FirebaseAILogic.GenerateContentResponse
+    }
+    public struct AsyncIterator : _Concurrency.AsyncIteratorProtocol {
+      #if compiler(>=5.3) && $NonescapableTypes
+      @available(iOS 18.0, macOS 15.0, macCatalyst 18.0, tvOS 18.0, watchOS 11.0, visionOS 2.0, *)
+      public mutating func next(isolation actor: isolated (any _Concurrency.Actor)?) async throws -> FirebaseAILogic.GenerativeModelSession.ResponseStream<Content, PartialContent>.Snapshot?
+      #endif
+      #if compiler(>=5.3) && $NonescapableTypes
+      public mutating func next() async throws -> FirebaseAILogic.GenerativeModelSession.ResponseStream<Content, PartialContent>.Snapshot?
+      #endif
+      public typealias Element = FirebaseAILogic.GenerativeModelSession.ResponseStream<Content, PartialContent>.Snapshot
+      @available(iOS 18.0, tvOS 18.0, watchOS 11.0, visionOS 2.0, macOS 15.0, *)
+      @_implements(_Concurrency.AsyncIteratorProtocol, Failure) public typealias __AsyncIteratorProtocol_Failure = any Swift.Error
+    }
+    public func makeAsyncIterator() -> FirebaseAILogic.GenerativeModelSession.ResponseStream<Content, PartialContent>.AsyncIterator
+    #if compiler(>=5.3) && $AsyncExecutionBehaviorAttributes
+    #if compiler(>=5.3) && $SendingArgsAndResults
+    nonisolated(nonsending) public func collect() async throws -> sending FirebaseAILogic.GenerativeModelSession.Response<Content>
+    #else
+    nonisolated(nonsending) public func collect() async throws -> FirebaseAILogic.GenerativeModelSession.Response<Content>
+    #endif
+    #endif
+    @available(iOS 18.0, tvOS 18.0, watchOS 11.0, visionOS 2.0, macOS 15.0, *)
+    @_implements(_Concurrency.AsyncSequence, Failure) public typealias __AsyncSequence_Failure = any Swift.Error
+  }
+}
+extension FirebaseAILogic.GenerativeModelSession {
+  #if compiler(>=5.3) && $NonexhaustiveAttribute
+  @nonexhaustive public enum GenerationError : Swift.Error, Foundation.LocalizedError {
+    public struct Context : Swift.Sendable {
+      public let debugDescription: Swift.String
+    }
+    case assetsUnavailable(FirebaseAILogic.GenerativeModelSession.GenerationError.Context)
+    case decodingFailure(FirebaseAILogic.GenerativeModelSession.GenerationError.Context)
+    case concurrentRequests(FirebaseAILogic.GenerativeModelSession.GenerationError.Context)
+    case unsupportedPromptContent(FirebaseAILogic.GenerativeModelSession.GenerationError.Context)
+    case internalError(FirebaseAILogic.GenerativeModelSession.GenerationError.Context, underlyingError: any Swift.Error)
+  }
+  #else
+  public enum GenerationError : Swift.Error, Foundation.LocalizedError {
+    public struct Context : Swift.Sendable {
+      public let debugDescription: Swift.String
+    }
+    case assetsUnavailable(FirebaseAILogic.GenerativeModelSession.GenerationError.Context)
+    case decodingFailure(FirebaseAILogic.GenerativeModelSession.GenerationError.Context)
+    case concurrentRequests(FirebaseAILogic.GenerativeModelSession.GenerationError.Context)
+    case unsupportedPromptContent(FirebaseAILogic.GenerativeModelSession.GenerationError.Context)
+    case internalError(FirebaseAILogic.GenerativeModelSession.GenerationError.Context, underlyingError: any Swift.Error)
+  }
+  #endif
+}
+public struct GoogleMaps : Swift.Sendable, Swift.Encodable {
+  public func encode(to encoder: any Swift.Encoder) throws
+}
+public struct GoogleMapsGroundingChunk : Swift.Sendable, Swift.Equatable, Swift.Hashable, Swift.Decodable {
+  public let url: Foundation.URL?
+  public let title: Swift.String?
+  public let placeID: Swift.String?
+  public init(from decoder: any Swift.Decoder) throws
+  public static func == (a: FirebaseAILogic.GoogleMapsGroundingChunk, b: FirebaseAILogic.GoogleMapsGroundingChunk) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public struct HybridModel : FirebaseAILogic.LanguageModel {
+  public init(primary: any FirebaseAILogic.LanguageModel, secondary: any FirebaseAILogic.LanguageModel)
+  public var _modelName: Swift.String {
+    get
+  }
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func _startSession(tools: [any FirebaseAILogic.ToolRepresentable]?, instructions: Swift.String?) throws -> any FirebaseAILogic._ModelSession
+  #endif
+}
+public struct HybridModelProvider : FirebaseAILogic.LanguageModelProvider {
+  public func _languageModel(firebaseAI: FirebaseAILogic.FirebaseAI) -> any FirebaseAILogic.LanguageModel
+}
+public struct ImageConfig : Swift.Sendable, Swift.Equatable {
+  public let aspectRatio: FirebaseAILogic.ImageConfig.AspectRatio?
+  public let imageSize: FirebaseAILogic.ImageConfig.ImageSize?
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(aspectRatio: FirebaseAILogic.ImageConfig.AspectRatio? = nil, imageSize: FirebaseAILogic.ImageConfig.ImageSize? = nil)
+  #endif
+  public static func == (a: FirebaseAILogic.ImageConfig, b: FirebaseAILogic.ImageConfig) -> Swift.Bool
+}
+extension FirebaseAILogic.ImageConfig {
+  public struct AspectRatio : Swift.Sendable, Swift.Equatable {
+    public static let square1x1: FirebaseAILogic.ImageConfig.AspectRatio
+    public static let portrait9x16: FirebaseAILogic.ImageConfig.AspectRatio
+    public static let landscape16x9: FirebaseAILogic.ImageConfig.AspectRatio
+    public static let portrait3x4: FirebaseAILogic.ImageConfig.AspectRatio
+    public static let landscape4x3: FirebaseAILogic.ImageConfig.AspectRatio
+    public static let portrait2x3: FirebaseAILogic.ImageConfig.AspectRatio
+    public static let landscape3x2: FirebaseAILogic.ImageConfig.AspectRatio
+    public static let portrait4x5: FirebaseAILogic.ImageConfig.AspectRatio
+    public static let landscape5x4: FirebaseAILogic.ImageConfig.AspectRatio
+    public static let portrait1x4: FirebaseAILogic.ImageConfig.AspectRatio
+    public static let landscape4x1: FirebaseAILogic.ImageConfig.AspectRatio
+    public static let portrait1x8: FirebaseAILogic.ImageConfig.AspectRatio
+    public static let landscape8x1: FirebaseAILogic.ImageConfig.AspectRatio
+    public static let ultrawide21x9: FirebaseAILogic.ImageConfig.AspectRatio
+    public static func == (a: FirebaseAILogic.ImageConfig.AspectRatio, b: FirebaseAILogic.ImageConfig.AspectRatio) -> Swift.Bool
+  }
+  public struct ImageSize : Swift.Sendable, Swift.Equatable {
+    public static let size512: FirebaseAILogic.ImageConfig.ImageSize
+    public static let size1K: FirebaseAILogic.ImageConfig.ImageSize
+    public static let size2K: FirebaseAILogic.ImageConfig.ImageSize
+    public static let size4K: FirebaseAILogic.ImageConfig.ImageSize
+    public static func == (a: FirebaseAILogic.ImageConfig.ImageSize, b: FirebaseAILogic.ImageConfig.ImageSize) -> Swift.Bool
+  }
+}
+extension FirebaseAILogic.ImageConfig : Swift.Encodable {
+  public func encode(to encoder: any Swift.Encoder) throws
+}
+@available(*, deprecated, message: "All Imagen models are deprecated and will shut down as early as June 2026. As a replacement, you can migrate your apps to use Gemini Image models (the \"Nano Banana\" models).")
+public struct ImagenAspectRatio : Swift.Sendable {
+  public static let square1x1: FirebaseAILogic.ImagenAspectRatio
+  public static let portrait9x16: FirebaseAILogic.ImagenAspectRatio
+  public static let landscape16x9: FirebaseAILogic.ImagenAspectRatio
+  public static let portrait3x4: FirebaseAILogic.ImagenAspectRatio
+  public static let landscape4x3: FirebaseAILogic.ImagenAspectRatio
+}
+@available(*, deprecated, message: "All Imagen models are deprecated and will shut down as early as June 2026. As a replacement, you can migrate your apps to use Gemini Image models (the \"Nano Banana\" models).")
+public struct ImagenGenerationConfig {
+  public var negativePrompt: Swift.String?
+  public var numberOfImages: Swift.Int?
+  public var aspectRatio: FirebaseAILogic.ImagenAspectRatio?
+  public var imageFormat: FirebaseAILogic.ImagenImageFormat?
+  public var addWatermark: Swift.Bool?
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(negativePrompt: Swift.String? = nil, numberOfImages: Swift.Int? = nil, aspectRatio: FirebaseAILogic.ImagenAspectRatio? = nil, imageFormat: FirebaseAILogic.ImagenImageFormat? = nil, addWatermark: Swift.Bool? = nil)
+  #endif
+}
+@available(*, deprecated, message: "All Imagen models are deprecated and will shut down as early as June 2026. As a replacement, you can migrate your apps to use Gemini Image models (the \"Nano Banana\" models).")
+public struct ImagenGenerationResponse<T> : Swift.Sendable where T : Swift.Sendable {
+  public let images: [T]
+  public let filteredReason: Swift.String?
+}
+@available(*, deprecated, message: "All Imagen models are deprecated and will shut down as early as June 2026. As a replacement, you can migrate your apps to use Gemini Image models (the \"Nano Banana\" models).")
+extension FirebaseAILogic.ImagenGenerationResponse : Swift.Decodable where T : Swift.Decodable {
+  public init(from decoder: any Swift.Decoder) throws
+}
+@available(*, deprecated, message: "All Imagen models are deprecated and will shut down as early as June 2026. As a replacement, you can migrate your apps to use Gemini Image models (the \"Nano Banana\" models).")
+public struct ImagenImageFormat {
+  public static func png() -> FirebaseAILogic.ImagenImageFormat
+  #if compiler(>=5.3) && $NonescapableTypes
+  public static func jpeg(compressionQuality: Swift.Int? = nil) -> FirebaseAILogic.ImagenImageFormat
+  #endif
+}
+@available(*, deprecated, message: "All Imagen models are deprecated and will shut down as early as June 2026. As a replacement, you can migrate your apps to use Gemini Image models (the \"Nano Banana\" models).")
+public struct ImagenImagesBlockedError : Swift.Error {
+}
+@available(*, deprecated, message: "All Imagen models are deprecated and will shut down as early as June 2026. As a replacement, you can migrate your apps to use Gemini Image models (the \"Nano Banana\" models).")
+extension FirebaseAILogic.ImagenImagesBlockedError : Foundation.CustomNSError {
+  public static var errorDomain: Swift.String {
+    get
+  }
+  public var errorCode: Swift.Int {
+    get
+  }
+  public var errorUserInfo: [Swift.String : Any] {
+    get
+  }
+}
+@available(*, deprecated, message: "All Imagen models are deprecated and will shut down as early as June 2026. As a replacement, you can migrate your apps to use Gemini Image models (the \"Nano Banana\" models).")
+public struct ImagenInlineImage : Swift.Sendable {
+  public let mimeType: Swift.String
+  public let data: Foundation.Data
+}
+@available(*, deprecated, message: "All Imagen models are deprecated and will shut down as early as June 2026. As a replacement, you can migrate your apps to use Gemini Image models (the \"Nano Banana\" models).")
+extension FirebaseAILogic.ImagenInlineImage : Swift.Equatable {
+  public static func == (a: FirebaseAILogic.ImagenInlineImage, b: FirebaseAILogic.ImagenInlineImage) -> Swift.Bool
+}
+@available(*, deprecated, message: "All Imagen models are deprecated and will shut down as early as June 2026. As a replacement, you can migrate your apps to use Gemini Image models (the \"Nano Banana\" models).")
+extension FirebaseAILogic.ImagenInlineImage : Swift.Decodable {
+  public init(from decoder: any Swift.Decoder) throws
+}
+@_hasMissingDesignatedInitializers @available(*, deprecated, message: "All Imagen models are deprecated and will shut down as early as June 2026. As a replacement, you can migrate your apps to use Gemini Image models (the \"Nano Banana\" models).")
+final public class ImagenModel {
+  final public func generateImages(prompt: Swift.String) async throws -> FirebaseAILogic.ImagenGenerationResponse<FirebaseAILogic.ImagenInlineImage>
+  @objc deinit
+}
+@available(*, deprecated, message: "All Imagen models are deprecated and will shut down as early as June 2026. As a replacement, you can migrate your apps to use Gemini Image models (the \"Nano Banana\" models).")
+public struct ImagenPersonFilterLevel {
+  public static let blockAll: FirebaseAILogic.ImagenPersonFilterLevel
+  public static let allowAdult: FirebaseAILogic.ImagenPersonFilterLevel
+  public static let allowAll: FirebaseAILogic.ImagenPersonFilterLevel
+}
+@available(*, deprecated, message: "All Imagen models are deprecated and will shut down as early as June 2026. As a replacement, you can migrate your apps to use Gemini Image models (the \"Nano Banana\" models).")
+public struct ImagenSafetyFilterLevel : Swift.Sendable {
+  public static let blockLowAndAbove: FirebaseAILogic.ImagenSafetyFilterLevel
+  public static let blockMediumAndAbove: FirebaseAILogic.ImagenSafetyFilterLevel
+  public static let blockOnlyHigh: FirebaseAILogic.ImagenSafetyFilterLevel
+  public static let blockNone: FirebaseAILogic.ImagenSafetyFilterLevel
+}
+@available(*, deprecated, message: "All Imagen models are deprecated and will shut down as early as June 2026. As a replacement, you can migrate your apps to use Gemini Image models (the \"Nano Banana\" models).")
+public struct ImagenSafetySettings {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(safetyFilterLevel: FirebaseAILogic.ImagenSafetyFilterLevel? = nil, personFilterLevel: FirebaseAILogic.ImagenPersonFilterLevel? = nil)
+  #endif
+}
+public typealias JSONObject = [Swift.String : FirebaseAILogic.JSONValue]
+public enum JSONValue : Swift.Sendable {
+  case null
+  case number(Swift.Double)
+  case string(Swift.String)
+  case bool(Swift.Bool)
+  case object(FirebaseAILogic.JSONObject)
+  case array([FirebaseAILogic.JSONValue])
+}
+extension FirebaseAILogic.JSONValue : Swift.Decodable {
+  public init(from decoder: any Swift.Decoder) throws
+}
+extension FirebaseAILogic.JSONValue : Swift.Encodable {
+  public func encode(to encoder: any Swift.Encoder) throws
+}
+extension FirebaseAILogic.JSONValue : Swift.Equatable {
+  public static func == (a: FirebaseAILogic.JSONValue, b: FirebaseAILogic.JSONValue) -> Swift.Bool
+}
+public protocol LanguageModel : FirebaseAILogic.LanguageModelProvider {
+  var _modelName: Swift.String { get }
+  #if compiler(>=5.3) && $NonescapableTypes
+  func _startSession(tools: [any FirebaseAILogic.ToolRepresentable]?, instructions: Swift.String?) throws -> any FirebaseAILogic._ModelSession
+  #endif
+}
+extension FirebaseAILogic.LanguageModel {
+  public func _languageModel(firebaseAI: FirebaseAILogic.FirebaseAI) -> any FirebaseAILogic.LanguageModel
+}
+public protocol LanguageModelProvider : Swift.Sendable {
+  func _languageModel(firebaseAI: FirebaseAILogic.FirebaseAI) -> any FirebaseAILogic.LanguageModel
+}
+extension FirebaseAILogic.LanguageModelProvider where Self == FirebaseAILogic.GeminiModelProvider {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public static func geminiModel(name: Swift.String, safetySettings: [FirebaseAILogic.SafetySetting]? = nil, requestOptions: FirebaseAILogic.RequestOptions = RequestOptions()) -> FirebaseAILogic.GeminiModelProvider
+  #endif
+}
+extension FirebaseAILogic.LanguageModelProvider where Self == FirebaseAILogic.FirebaseAI.SystemLanguageModel {
+  public static func systemModel(useCase: FirebaseAILogic.FirebaseAI.SystemLanguageModel.UseCase = .general, guardrails: FirebaseAILogic.FirebaseAI.SystemLanguageModel.Guardrails = .default) -> FirebaseAILogic.FirebaseAI.SystemLanguageModel
+}
+extension FirebaseAILogic.LanguageModelProvider where Self == FirebaseAILogic.HybridModelProvider {
+  public static func hybridModel(primary: any FirebaseAILogic.LanguageModelProvider, secondary: any FirebaseAILogic.LanguageModelProvider) -> FirebaseAILogic.HybridModelProvider
+}
+extension Swift.String : FirebaseAILogic.LanguageModelProvider {
+  public func _languageModel(firebaseAI: FirebaseAILogic.FirebaseAI) -> any FirebaseAILogic.LanguageModel
+}
+@available(watchOS, unavailable)
+public struct LiveAudioTranscription : Swift.Sendable {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public var text: Swift.String? {
+    get
+  }
+  #endif
+}
+@available(watchOS, unavailable)
+public struct LiveGenerationConfig : Swift.Sendable {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(temperature: Swift.Float? = nil, topP: Swift.Float? = nil, topK: Swift.Int? = nil, candidateCount: Swift.Int? = nil, maxOutputTokens: Swift.Int? = nil, presencePenalty: Swift.Float? = nil, frequencyPenalty: Swift.Float? = nil, responseModalities: [FirebaseAILogic.ResponseModality]? = nil, speech: FirebaseAILogic.SpeechConfig? = nil, inputAudioTranscription: FirebaseAILogic.AudioTranscriptionConfig? = nil, outputAudioTranscription: FirebaseAILogic.AudioTranscriptionConfig? = nil, contextWindowCompression: FirebaseAILogic.ContextWindowCompressionConfig? = nil)
+  #endif
+}
+@_hasMissingDesignatedInitializers @available(watchOS, unavailable)
+final public class LiveGenerativeModel {
+  #if compiler(>=5.3) && $NonescapableTypes
+  final public func connect(sessionResumption: FirebaseAILogic.SessionResumptionConfig? = nil) async throws -> FirebaseAILogic.LiveSession
+  #endif
+  @objc deinit
+}
+@available(watchOS, unavailable)
+public struct LiveServerContent : Swift.Sendable {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public var modelTurn: FirebaseAILogic.ModelContent? {
+    get
+  }
+  #endif
+  public var isTurnComplete: Swift.Bool {
+    get
+  }
+  public var wasInterrupted: Swift.Bool {
+    get
+  }
+  public var isGenerationComplete: Swift.Bool {
+    get
+  }
+  #if compiler(>=5.3) && $NonescapableTypes
+  public var groundingMetadata: FirebaseAILogic.GroundingMetadata? {
+    get
+  }
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public var inputAudioTranscription: FirebaseAILogic.LiveAudioTranscription? {
+    get
+  }
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public var outputAudioTranscription: FirebaseAILogic.LiveAudioTranscription? {
+    get
+  }
+  #endif
+}
+@available(watchOS, unavailable)
+public struct LiveServerGoingAwayNotice : Swift.Sendable {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public var timeLeft: Foundation.TimeInterval? {
+    get
+  }
+  #endif
+}
+@available(watchOS, unavailable)
+public struct LiveServerMessage : Swift.Sendable {
+  public enum Payload : Swift.Sendable {
+    case content(FirebaseAILogic.LiveServerContent)
+    case toolCall(FirebaseAILogic.LiveServerToolCall)
+    case toolCallCancellation(FirebaseAILogic.LiveServerToolCallCancellation)
+    case sessionResumptionUpdate(FirebaseAILogic.LiveSessionResumptionUpdate)
+    case goingAwayNotice(FirebaseAILogic.LiveServerGoingAwayNotice)
+  }
+  public let payload: FirebaseAILogic.LiveServerMessage.Payload
+  #if compiler(>=5.3) && $NonescapableTypes
+  public var usageMetadata: FirebaseAILogic.GenerateContentResponse.UsageMetadata? {
+    get
+  }
+  #endif
+}
+@available(watchOS, unavailable)
+public struct LiveServerToolCall : Swift.Sendable {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public var functionCalls: [FirebaseAILogic.FunctionCallPart]? {
+    get
+  }
+  #endif
+}
+@available(watchOS, unavailable)
+public struct LiveServerToolCallCancellation : Swift.Sendable {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public var ids: [Swift.String]? {
+    get
+  }
+  #endif
+}
+@_hasMissingDesignatedInitializers @available(watchOS, unavailable)
+final public class LiveSession : Swift.Sendable {
+  final public var responses: _Concurrency.AsyncThrowingStream<FirebaseAILogic.LiveServerMessage, any Swift.Error> {
+    get
+  }
+  final public func sendFunctionResponses(_ responses: [FirebaseAILogic.FunctionResponsePart]) async
+  final public func sendAudioRealtime(_ audio: Foundation.Data) async
+  final public func sendVideoRealtime(_ video: Foundation.Data, mimeType: Swift.String) async
+  final public func sendTextRealtime(_ text: Swift.String) async
+  final public func sendContent(_ content: [FirebaseAILogic.ModelContent], turnComplete: Swift.Bool = false) async
+  final public func sendContent(_ parts: any FirebaseAILogic.PartsRepresentable..., turnComplete: Swift.Bool = false) async
+  final public func close() async
+  #if compiler(>=5.3) && $NonescapableTypes
+  final public func resumeSession(sessionResumption: FirebaseAILogic.SessionResumptionConfig? = nil) async throws
+  #endif
+  @objc deinit
+}
+@available(watchOS, unavailable)
+public struct LiveSessionUnsupportedMessageError : Swift.Error, Swift.Sendable, Foundation.CustomNSError {
+  public var errorUserInfo: [Swift.String : Any] {
+    get
+  }
+}
+@available(watchOS, unavailable)
+public struct LiveSessionLostConnectionError : Swift.Error, Swift.Sendable, Foundation.CustomNSError {
+  public var errorUserInfo: [Swift.String : Any] {
+    get
+  }
+}
+@available(watchOS, unavailable)
+public struct LiveSessionUnexpectedClosureError : Swift.Error, Swift.Sendable, Foundation.CustomNSError {
+  public var errorUserInfo: [Swift.String : Any] {
+    get
+  }
+}
+@available(watchOS, unavailable)
+public struct LiveSessionSetupError : Swift.Error, Swift.Sendable, Foundation.CustomNSError {
+  public var errorUserInfo: [Swift.String : Any] {
+    get
+  }
+}
+@available(watchOS, unavailable)
+public struct LiveSessionResumptionUpdate : Swift.Sendable {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public var newHandle: Swift.String? {
+    get
+  }
+  #endif
+  public var resumable: Swift.Bool {
+    get
+  }
+  #if compiler(>=5.3) && $NonescapableTypes
+  public var lastConsumedClientMessageIndex: Swift.Int? {
+    get
+  }
+  #endif
+}
+public struct ModalityTokenCount : Swift.Sendable {
+  public let modality: FirebaseAILogic.ContentModality
+  public let tokenCount: Swift.Int
+}
+public struct ContentModality : Swift.Hashable, Swift.Sendable {
+  public static let text: FirebaseAILogic.ContentModality
+  public static let image: FirebaseAILogic.ContentModality
+  public static let video: FirebaseAILogic.ContentModality
+  public static let audio: FirebaseAILogic.ContentModality
+  public static let document: FirebaseAILogic.ContentModality
+  public let rawValue: Swift.String
+  public static func == (a: FirebaseAILogic.ContentModality, b: FirebaseAILogic.ContentModality) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension FirebaseAILogic.ModalityTokenCount : Swift.Decodable {
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct ModelContent : Swift.Equatable, Swift.Sendable {
+  public let role: Swift.String?
+  public var parts: [any FirebaseAILogic.Part] {
+    get
+  }
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(role: Swift.String? = "user", parts: [any FirebaseAILogic.Part])
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(role: Swift.String? = "user", parts: any FirebaseAILogic.PartsRepresentable...)
+  #endif
+  public static func == (a: FirebaseAILogic.ModelContent, b: FirebaseAILogic.ModelContent) -> Swift.Bool
+}
+extension FirebaseAILogic.ModelContent : Swift.Codable {
+  public init(from decoder: any Swift.Decoder) throws
+  public func encode(to encoder: any Swift.Encoder) throws
+}
+public protocol _ModelSession : Swift.Sendable {
+  var _hasHistory: Swift.Bool { get }
+  #if compiler(>=5.3) && $NonescapableTypes && $AsyncExecutionBehaviorAttributes
+  nonisolated(nonsending) func _respond(to prompt: [any FirebaseAILogic.Part], schema: FirebaseAILogic.FirebaseAI.GenerationSchema?, includeSchemaInPrompt: Swift.Bool, options: any FirebaseAILogic.GenerationOptionsRepresentable) async throws -> FirebaseAILogic._ModelSessionResponse
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  #if compiler(>=5.3) && $SendingArgsAndResults
+  @available(macOS 12.0, watchOS 8.0, *)
+  func _streamResponse(to prompt: [any FirebaseAILogic.Part], schema: FirebaseAILogic.FirebaseAI.GenerationSchema?, includeSchemaInPrompt: Swift.Bool, options: any FirebaseAILogic.GenerationOptionsRepresentable) -> sending _Concurrency.AsyncThrowingStream<FirebaseAILogic._ModelSessionResponse, any Swift.Error>
+  #else
+  @available(macOS 12.0, watchOS 8.0, *)
+  func _streamResponse(to prompt: [any FirebaseAILogic.Part], schema: FirebaseAILogic.FirebaseAI.GenerationSchema?, includeSchemaInPrompt: Swift.Bool, options: any FirebaseAILogic.GenerationOptionsRepresentable) -> _Concurrency.AsyncThrowingStream<FirebaseAILogic._ModelSessionResponse, any Swift.Error>
+  #endif
+  #endif
+}
+public struct _ModelSessionResponse : Swift.Sendable {
+}
+public protocol Part : FirebaseAILogic.PartsRepresentable, Swift.Decodable, Swift.Encodable, Swift.Equatable, Swift.Sendable {
+  var isThought: Swift.Bool { get }
+}
+public struct TextPart : FirebaseAILogic.Part {
+  public let text: Swift.String
+  public var isThought: Swift.Bool {
+    get
+  }
+  public init(_ text: Swift.String)
+  public static func == (a: FirebaseAILogic.TextPart, b: FirebaseAILogic.TextPart) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct InlineDataPart : FirebaseAILogic.Part {
+  public var data: Foundation.Data {
+    get
+  }
+  public var mimeType: Swift.String {
+    get
+  }
+  public var isThought: Swift.Bool {
+    get
+  }
+  public init(data: Foundation.Data, mimeType: Swift.String)
+  public static func == (a: FirebaseAILogic.InlineDataPart, b: FirebaseAILogic.InlineDataPart) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct FileDataPart : FirebaseAILogic.Part {
+  public var uri: Swift.String {
+    get
+  }
+  public var mimeType: Swift.String {
+    get
+  }
+  public var isThought: Swift.Bool {
+    get
+  }
+  public init(uri: Swift.String, mimeType: Swift.String)
+  public static func == (a: FirebaseAILogic.FileDataPart, b: FirebaseAILogic.FileDataPart) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct FunctionCallPart : FirebaseAILogic.Part {
+  public var name: Swift.String {
+    get
+  }
+  public var args: FirebaseAILogic.JSONObject {
+    get
+  }
+  public var isThought: Swift.Bool {
+    get
+  }
+  #if compiler(>=5.3) && $NonescapableTypes
+  public var functionId: Swift.String? {
+    get
+  }
+  #endif
+  public init(name: Swift.String, args: FirebaseAILogic.JSONObject)
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(name: Swift.String, args: FirebaseAILogic.JSONObject, id: Swift.String? = nil)
+  #endif
+  public static func == (a: FirebaseAILogic.FunctionCallPart, b: FirebaseAILogic.FunctionCallPart) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct FunctionResponsePart : FirebaseAILogic.Part {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public var functionId: Swift.String? {
+    get
+  }
+  #endif
+  public var name: Swift.String {
+    get
+  }
+  public var response: FirebaseAILogic.JSONObject {
+    get
+  }
+  public var isThought: Swift.Bool {
+    get
+  }
+  public init(name: Swift.String, response: FirebaseAILogic.JSONObject)
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(name: Swift.String, response: FirebaseAILogic.JSONObject, functionId: Swift.String? = nil)
+  #endif
+  public static func == (a: FirebaseAILogic.FunctionResponsePart, b: FirebaseAILogic.FunctionResponsePart) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct ExecutableCodePart : FirebaseAILogic.Part {
+  public struct Language : Swift.Sendable, Swift.Equatable, Swift.CustomStringConvertible {
+    public static let python: FirebaseAILogic.ExecutableCodePart.Language
+    public var description: Swift.String {
+      get
+    }
+    public static func == (a: FirebaseAILogic.ExecutableCodePart.Language, b: FirebaseAILogic.ExecutableCodePart.Language) -> Swift.Bool
+  }
+  public var language: FirebaseAILogic.ExecutableCodePart.Language {
+    get
+  }
+  public var code: Swift.String {
+    get
+  }
+  public var isThought: Swift.Bool {
+    get
+  }
+  public init(language: FirebaseAILogic.ExecutableCodePart.Language, code: Swift.String)
+  public static func == (a: FirebaseAILogic.ExecutableCodePart, b: FirebaseAILogic.ExecutableCodePart) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct CodeExecutionResultPart : FirebaseAILogic.Part {
+  public struct Outcome : Swift.Sendable, Swift.Equatable, Swift.CustomStringConvertible {
+    public static let ok: FirebaseAILogic.CodeExecutionResultPart.Outcome
+    public static let failed: FirebaseAILogic.CodeExecutionResultPart.Outcome
+    public static let deadlineExceeded: FirebaseAILogic.CodeExecutionResultPart.Outcome
+    public var description: Swift.String {
+      get
+    }
+    public static func == (a: FirebaseAILogic.CodeExecutionResultPart.Outcome, b: FirebaseAILogic.CodeExecutionResultPart.Outcome) -> Swift.Bool
+  }
+  public var outcome: FirebaseAILogic.CodeExecutionResultPart.Outcome {
+    get
+  }
+  #if compiler(>=5.3) && $NonescapableTypes
+  public var output: Swift.String? {
+    get
+  }
+  #endif
+  public var isThought: Swift.Bool {
+    get
+  }
+  public init(outcome: FirebaseAILogic.CodeExecutionResultPart.Outcome, output: Swift.String)
+  public static func == (a: FirebaseAILogic.CodeExecutionResultPart, b: FirebaseAILogic.CodeExecutionResultPart) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public protocol PartsRepresentable {
+  var partsValue: [any FirebaseAILogic.Part] { get }
+}
+extension FirebaseAILogic.Part {
+  public var partsValue: [any FirebaseAILogic.Part] {
+    get
+  }
+}
+extension Swift.Array : FirebaseAILogic.PartsRepresentable where Element == any FirebaseAILogic.PartsRepresentable {
+  public var partsValue: [any FirebaseAILogic.Part] {
+    get
+  }
+}
+extension Swift.String : FirebaseAILogic.PartsRepresentable {
+  public var partsValue: [any FirebaseAILogic.Part] {
+    get
+  }
+}
+extension UIKit.UIImage : FirebaseAILogic.PartsRepresentable {
+  public var partsValue: [any FirebaseAILogic.Part] {
+    get
+  }
+}
+public struct ResponseGenerationOptions : Swift.Sendable, Swift.Equatable {
+  public static func == (a: FirebaseAILogic.ResponseGenerationOptions, b: FirebaseAILogic.ResponseGenerationOptions) -> Swift.Bool
+}
+extension FirebaseAILogic.ResponseGenerationOptions : FirebaseAILogic.GenerationOptionsRepresentable {
+  public var responseGenerationOptions: FirebaseAILogic.ResponseGenerationOptions {
+    get
+  }
+}
+public struct ResponseModality : Swift.Sendable, Swift.Equatable {
+  public static let text: FirebaseAILogic.ResponseModality
+  public static let image: FirebaseAILogic.ResponseModality
+  public static let audio: FirebaseAILogic.ResponseModality
+  public static func == (a: FirebaseAILogic.ResponseModality, b: FirebaseAILogic.ResponseModality) -> Swift.Bool
+}
+public struct SafetyRating : Swift.Equatable, Swift.Hashable, Swift.Sendable {
+  public let category: FirebaseAILogic.HarmCategory
+  public let probability: FirebaseAILogic.SafetyRating.HarmProbability
+  public let probabilityScore: Swift.Float
+  public let severity: FirebaseAILogic.SafetyRating.HarmSeverity
+  public let severityScore: Swift.Float
+  public let blocked: Swift.Bool
+  public init(category: FirebaseAILogic.HarmCategory, probability: FirebaseAILogic.SafetyRating.HarmProbability, probabilityScore: Swift.Float, severity: FirebaseAILogic.SafetyRating.HarmSeverity, severityScore: Swift.Float, blocked: Swift.Bool)
+  public struct HarmProbability : Swift.Hashable, Swift.Sendable {
+    public static let negligible: FirebaseAILogic.SafetyRating.HarmProbability
+    public static let low: FirebaseAILogic.SafetyRating.HarmProbability
+    public static let medium: FirebaseAILogic.SafetyRating.HarmProbability
+    public static let high: FirebaseAILogic.SafetyRating.HarmProbability
+    public let rawValue: Swift.String
+    public static func == (a: FirebaseAILogic.SafetyRating.HarmProbability, b: FirebaseAILogic.SafetyRating.HarmProbability) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public struct HarmSeverity : Swift.Hashable, Swift.Sendable {
+    public static let negligible: FirebaseAILogic.SafetyRating.HarmSeverity
+    public static let low: FirebaseAILogic.SafetyRating.HarmSeverity
+    public static let medium: FirebaseAILogic.SafetyRating.HarmSeverity
+    public static let high: FirebaseAILogic.SafetyRating.HarmSeverity
+    public let rawValue: Swift.String
+    public static func == (a: FirebaseAILogic.SafetyRating.HarmSeverity, b: FirebaseAILogic.SafetyRating.HarmSeverity) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public static func == (a: FirebaseAILogic.SafetyRating, b: FirebaseAILogic.SafetyRating) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public struct SafetySetting : Swift.Sendable {
+  public struct HarmBlockThreshold : Swift.Sendable {
+    public static let blockLowAndAbove: FirebaseAILogic.SafetySetting.HarmBlockThreshold
+    public static let blockMediumAndAbove: FirebaseAILogic.SafetySetting.HarmBlockThreshold
+    public static let blockOnlyHigh: FirebaseAILogic.SafetySetting.HarmBlockThreshold
+    public static let blockNone: FirebaseAILogic.SafetySetting.HarmBlockThreshold
+    public static let off: FirebaseAILogic.SafetySetting.HarmBlockThreshold
+  }
+  public struct HarmBlockMethod : Swift.Sendable {
+    public static let severity: FirebaseAILogic.SafetySetting.HarmBlockMethod
+    public static let probability: FirebaseAILogic.SafetySetting.HarmBlockMethod
+  }
+  public let harmCategory: FirebaseAILogic.HarmCategory
+  public let threshold: FirebaseAILogic.SafetySetting.HarmBlockThreshold
+  public let method: FirebaseAILogic.SafetySetting.HarmBlockMethod?
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(harmCategory: FirebaseAILogic.HarmCategory, threshold: FirebaseAILogic.SafetySetting.HarmBlockThreshold, method: FirebaseAILogic.SafetySetting.HarmBlockMethod? = nil)
+  #endif
+}
+public struct HarmCategory : Swift.Hashable, Swift.Sendable {
+  public static let harassment: FirebaseAILogic.HarmCategory
+  public static let hateSpeech: FirebaseAILogic.HarmCategory
+  public static let sexuallyExplicit: FirebaseAILogic.HarmCategory
+  public static let dangerousContent: FirebaseAILogic.HarmCategory
+  public static let civicIntegrity: FirebaseAILogic.HarmCategory
+  public let rawValue: Swift.String
+  public static func == (a: FirebaseAILogic.HarmCategory, b: FirebaseAILogic.HarmCategory) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension FirebaseAILogic.SafetyRating : Swift.Decodable {
+  public init(from decoder: any Swift.Decoder) throws
+}
+extension FirebaseAILogic.SafetySetting.HarmBlockThreshold : Swift.Encodable {
+}
+extension FirebaseAILogic.SafetySetting : Swift.Encodable {
+  public func encode(to encoder: any Swift.Encoder) throws
+}
+@_hasMissingDesignatedInitializers final public class Schema : Swift.Sendable {
+  public struct StringFormat {
+    public static func custom(_ format: Swift.String) -> FirebaseAILogic.Schema.StringFormat
+  }
+  public struct IntegerFormat : Swift.Sendable {
+    public static let int32: FirebaseAILogic.Schema.IntegerFormat
+    public static let int64: FirebaseAILogic.Schema.IntegerFormat
+    public static func custom(_ format: Swift.String) -> FirebaseAILogic.Schema.IntegerFormat
+  }
+  final public var type: Swift.String {
+    get
+  }
+  final public let format: Swift.String?
+  final public let description: Swift.String?
+  final public let title: Swift.String?
+  final public let nullable: Swift.Bool?
+  final public let enumValues: [Swift.String]?
+  final public let items: FirebaseAILogic.Schema?
+  final public let minItems: Swift.Int?
+  final public let maxItems: Swift.Int?
+  final public let minimum: Swift.Double?
+  final public let maximum: Swift.Double?
+  final public let properties: [Swift.String : FirebaseAILogic.Schema]?
+  final public let anyOf: [FirebaseAILogic.Schema]?
+  final public let requiredProperties: [Swift.String]?
+  final public let propertyOrdering: [Swift.String]?
+  #if compiler(>=5.3) && $NonescapableTypes
+  public static func string(description: Swift.String? = nil, title: Swift.String? = nil, nullable: Swift.Bool = false, format: FirebaseAILogic.Schema.StringFormat? = nil) -> FirebaseAILogic.Schema
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public static func enumeration(values: [Swift.String], description: Swift.String? = nil, title: Swift.String? = nil, nullable: Swift.Bool = false) -> FirebaseAILogic.Schema
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public static func float(description: Swift.String? = nil, title: Swift.String? = nil, nullable: Swift.Bool = false, minimum: Swift.Float? = nil, maximum: Swift.Float? = nil) -> FirebaseAILogic.Schema
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public static func double(description: Swift.String? = nil, title: Swift.String? = nil, nullable: Swift.Bool = false, minimum: Swift.Double? = nil, maximum: Swift.Double? = nil) -> FirebaseAILogic.Schema
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public static func integer(description: Swift.String? = nil, title: Swift.String? = nil, nullable: Swift.Bool = false, format: FirebaseAILogic.Schema.IntegerFormat? = nil, minimum: Swift.Int? = nil, maximum: Swift.Int? = nil) -> FirebaseAILogic.Schema
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public static func boolean(description: Swift.String? = nil, title: Swift.String? = nil, nullable: Swift.Bool = false) -> FirebaseAILogic.Schema
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public static func array(items: FirebaseAILogic.Schema, description: Swift.String? = nil, title: Swift.String? = nil, nullable: Swift.Bool = false, minItems: Swift.Int? = nil, maxItems: Swift.Int? = nil) -> FirebaseAILogic.Schema
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public static func object(properties: [Swift.String : FirebaseAILogic.Schema], optionalProperties: [Swift.String] = [], propertyOrdering: [Swift.String]? = nil, description: Swift.String? = nil, title: Swift.String? = nil, nullable: Swift.Bool = false) -> FirebaseAILogic.Schema
+  #endif
+  public static func anyOf(schemas: [FirebaseAILogic.Schema]) -> FirebaseAILogic.Schema
+  @objc deinit
+}
+extension FirebaseAILogic.Schema : Swift.Encodable {
+  final public func encode(to encoder: any Swift.Encoder) throws
+}
+extension FirebaseAILogic.Schema : Swift.Equatable {
+  public static func == (lhs: FirebaseAILogic.Schema, rhs: FirebaseAILogic.Schema) -> Swift.Bool
+}
+@available(watchOS, unavailable)
+public struct SessionResumptionConfig : Swift.Sendable {
+  public init(handle: Swift.String)
+  public init()
+}
+@available(watchOS, unavailable)
+public struct SpeechConfig : Swift.Sendable {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(voiceName: Swift.String, languageCode: Swift.String? = nil)
+  #endif
+}
+extension FirebaseAILogic.FirebaseAI {
+  @_hasMissingDesignatedInitializers final public class SystemLanguageModel : Swift.Sendable {
+    final public var availability: FirebaseAILogic.FirebaseAI.SystemLanguageModel.Availability {
+      get
+    }
+    final public var isAvailable: Swift.Bool {
+      get
+    }
+    public struct UseCase : Swift.Sendable, Swift.Equatable {
+      public static let general: FirebaseAILogic.FirebaseAI.SystemLanguageModel.UseCase
+      public static let contentTagging: FirebaseAILogic.FirebaseAI.SystemLanguageModel.UseCase
+      public static func == (a: FirebaseAILogic.FirebaseAI.SystemLanguageModel.UseCase, b: FirebaseAILogic.FirebaseAI.SystemLanguageModel.UseCase) -> Swift.Bool
+    }
+    @objc deinit
+  }
+}
+extension FirebaseAILogic.FirebaseAI.SystemLanguageModel {
+  public struct Guardrails : Swift.Sendable, Swift.Equatable {
+    public static let `default`: FirebaseAILogic.FirebaseAI.SystemLanguageModel.Guardrails
+    public static let permissiveContentTransformations: FirebaseAILogic.FirebaseAI.SystemLanguageModel.Guardrails
+    public static func == (a: FirebaseAILogic.FirebaseAI.SystemLanguageModel.Guardrails, b: FirebaseAILogic.FirebaseAI.SystemLanguageModel.Guardrails) -> Swift.Bool
+  }
+}
+extension FirebaseAILogic.FirebaseAI.SystemLanguageModel {
+  @frozen public enum Availability : Swift.Equatable, Swift.Sendable {
+    #if compiler(>=5.3) && $NonexhaustiveAttribute
+    @nonexhaustive public enum UnavailableReason : Swift.Hashable, Swift.Equatable, Swift.Sendable {
+      case deviceNotEligible
+      case appleIntelligenceNotEnabled
+      case modelNotReady
+      case unknown
+      public static func == (a: FirebaseAILogic.FirebaseAI.SystemLanguageModel.Availability.UnavailableReason, b: FirebaseAILogic.FirebaseAI.SystemLanguageModel.Availability.UnavailableReason) -> Swift.Bool
+      public func hash(into hasher: inout Swift.Hasher)
+      public var hashValue: Swift.Int {
+        get
+      }
+    }
+    #else
+    public enum UnavailableReason : Swift.Hashable, Swift.Equatable, Swift.Sendable {
+      case deviceNotEligible
+      case appleIntelligenceNotEnabled
+      case modelNotReady
+      case unknown
+      public static func == (a: FirebaseAILogic.FirebaseAI.SystemLanguageModel.Availability.UnavailableReason, b: FirebaseAILogic.FirebaseAI.SystemLanguageModel.Availability.UnavailableReason) -> Swift.Bool
+      public func hash(into hasher: inout Swift.Hasher)
+      public var hashValue: Swift.Int {
+        get
+      }
+    }
+    #endif
+    case available
+    case unavailable(FirebaseAILogic.FirebaseAI.SystemLanguageModel.Availability.UnavailableReason)
+    public static func == (a: FirebaseAILogic.FirebaseAI.SystemLanguageModel.Availability, b: FirebaseAILogic.FirebaseAI.SystemLanguageModel.Availability) -> Swift.Bool
+  }
+  public static var `default`: FirebaseAILogic.FirebaseAI.SystemLanguageModel {
+    get
+  }
+  convenience public init(useCase: FirebaseAILogic.FirebaseAI.SystemLanguageModel.UseCase = .general, guardrails: FirebaseAILogic.FirebaseAI.SystemLanguageModel.Guardrails = .default)
+  @available(iOS 16.0, macOS 13.0, tvOS 16.0, watchOS 9.0, *)
+  final public var supportedLanguages: Swift.Set<Foundation.Locale.Language> {
+    get
+  }
+  final public func supportsLocale(_ locale: Foundation.Locale = Locale.current) -> Swift.Bool
+}
+extension FirebaseAILogic.FirebaseAI.SystemLanguageModel : FirebaseAILogic.LanguageModel {
+  final public var _modelName: Swift.String {
+    get
+  }
+  #if compiler(>=5.3) && $NonescapableTypes
+  final public func _startSession(tools: [any FirebaseAILogic.ToolRepresentable]?, instructions: Swift.String?) throws -> any FirebaseAILogic._ModelSession
+  #endif
+}
+@_hasMissingDesignatedInitializers final public class TemplateGenerativeModel : Swift.Sendable {
+  #if compiler(>=5.3) && $NonescapableTypes
+  final public func generateContent(templateID: Swift.String, inputs: [Swift.String : Any], options: FirebaseAILogic.RequestOptions = RequestOptions(), toolConfig: FirebaseAILogic.TemplateToolConfig? = nil) async throws -> FirebaseAILogic.GenerateContentResponse
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @available(macOS 12.0, watchOS 8.0, *)
+  final public func generateContentStream(templateID: Swift.String, inputs: [Swift.String : Any], options: FirebaseAILogic.RequestOptions = RequestOptions(), toolConfig: FirebaseAILogic.TemplateToolConfig? = nil) throws -> _Concurrency.AsyncThrowingStream<FirebaseAILogic.GenerateContentResponse, any Swift.Error>
+  #endif
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers @available(*, deprecated, message: "All Imagen models are deprecated and will shut down as early as June 2026. As a replacement, you can migrate your apps to use Gemini Image models (the \"Nano Banana\" models).")
+final public class TemplateImagenModel : Swift.Sendable {
+  final public func generateImages(templateID: Swift.String, inputs: [Swift.String : Any], options: FirebaseAILogic.RequestOptions = RequestOptions()) async throws -> FirebaseAILogic.ImagenGenerationResponse<FirebaseAILogic.ImagenInlineImage>
+  @objc deinit
+}
+public struct TemplateToolConfig : Swift.Sendable, Swift.Encodable {
+  public let retrievalConfig: FirebaseAILogic.RetrievalConfig?
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(retrievalConfig: FirebaseAILogic.RetrievalConfig? = nil)
+  #endif
+  public func encode(to encoder: any Swift.Encoder) throws
+}
+public struct ThinkingConfig : Swift.Sendable, Swift.Equatable {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(thinkingBudget: Swift.Int? = nil, includeThoughts: Swift.Bool? = nil)
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(thinkingLevel: FirebaseAILogic.ThinkingConfig.ThinkingLevel, includeThoughts: Swift.Bool? = nil)
+  #endif
+  public static func == (a: FirebaseAILogic.ThinkingConfig, b: FirebaseAILogic.ThinkingConfig) -> Swift.Bool
+}
+extension FirebaseAILogic.ThinkingConfig {
+  public struct ThinkingLevel : Swift.Equatable {
+    public static let minimal: FirebaseAILogic.ThinkingConfig.ThinkingLevel
+    public static let low: FirebaseAILogic.ThinkingConfig.ThinkingLevel
+    public static let medium: FirebaseAILogic.ThinkingConfig.ThinkingLevel
+    public static let high: FirebaseAILogic.ThinkingConfig.ThinkingLevel
+    public static func == (a: FirebaseAILogic.ThinkingConfig.ThinkingLevel, b: FirebaseAILogic.ThinkingConfig.ThinkingLevel) -> Swift.Bool
+  }
+}
+extension FirebaseAILogic.ThinkingConfig : Swift.Encodable {
+  public func encode(to encoder: any Swift.Encoder) throws
+}
+public struct FunctionDeclaration : Swift.Sendable {
+  public init(name: Swift.String, description: Swift.String, parameters: [Swift.String : FirebaseAILogic.Schema], optionalParameters: [Swift.String] = [])
+}
+public struct GoogleSearch : Swift.Sendable {
+  public init()
+}
+public struct Tool : Swift.Sendable {
+}
+public struct FunctionCallingConfig : Swift.Sendable {
+  public static func auto() -> FirebaseAILogic.FunctionCallingConfig
+  #if compiler(>=5.3) && $NonescapableTypes
+  public static func any(allowedFunctionNames: [Swift.String]? = nil) -> FirebaseAILogic.FunctionCallingConfig
+  #endif
+  public static func none() -> FirebaseAILogic.FunctionCallingConfig
+}
+public struct ToolConfig : Swift.Sendable {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(functionCallingConfig: FirebaseAILogic.FunctionCallingConfig? = nil, retrievalConfig: FirebaseAILogic.RetrievalConfig? = nil)
+  #endif
+}
+public struct RetrievalConfig : Swift.Sendable, Swift.Encodable {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(location: _LocationEssentials.CLLocationCoordinate2D? = nil, languageCode: Swift.String? = nil)
+  #endif
+  public func encode(to encoder: any Swift.Encoder) throws
+}
+extension _LocationEssentials.CLLocationCoordinate2D : @unchecked @retroactive Swift.Sendable {
+}
+extension FirebaseAILogic.Tool : FirebaseAILogic.ToolRepresentable {
+  public var toolRepresentation: FirebaseAILogic.Tool {
+    get
+  }
+}
+extension FirebaseAILogic.ToolRepresentable where Self == FirebaseAILogic.Tool {
+  public static func functionDeclarations(_ functionDeclarations: [FirebaseAILogic.FunctionDeclaration]) -> FirebaseAILogic.Tool
+  public static func googleSearch(_ googleSearch: FirebaseAILogic.GoogleSearch = GoogleSearch()) -> FirebaseAILogic.Tool
+  public static func googleMaps() -> FirebaseAILogic.Tool
+  public static func urlContext() -> FirebaseAILogic.Tool
+  public static func codeExecution() -> FirebaseAILogic.Tool
+}
+extension FirebaseAILogic.FunctionDeclaration : Swift.Encodable {
+  public func encode(to encoder: any Swift.Encoder) throws
+}
+extension FirebaseAILogic.Tool : Swift.Encodable {
+  public func encode(to encoder: any Swift.Encoder) throws
+}
+extension FirebaseAILogic.FunctionCallingConfig : Swift.Encodable {
+  public func encode(to encoder: any Swift.Encoder) throws
+}
+extension FirebaseAILogic.GoogleSearch : Swift.Encodable {
+  public func encode(to encoder: any Swift.Encoder) throws
+}
+extension FirebaseAILogic.ToolConfig : Swift.Encodable {
+  public func encode(to encoder: any Swift.Encoder) throws
+}
+public protocol ToolRepresentable : Swift.Sendable {
+  var toolRepresentation: FirebaseAILogic.Tool { get }
+}
+public struct URLContextMetadata : Swift.Sendable, Swift.Hashable {
+  public let urlMetadata: [FirebaseAILogic.URLMetadata]
+  public static func == (a: FirebaseAILogic.URLContextMetadata, b: FirebaseAILogic.URLContextMetadata) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension FirebaseAILogic.URLContextMetadata : Swift.Decodable {
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct URLMetadata : Swift.Sendable, Swift.Hashable {
+  public struct URLRetrievalStatus : Swift.Hashable {
+    public static let success: FirebaseAILogic.URLMetadata.URLRetrievalStatus
+    public static let error: FirebaseAILogic.URLMetadata.URLRetrievalStatus
+    public static let paywall: FirebaseAILogic.URLMetadata.URLRetrievalStatus
+    public static let unsafe: FirebaseAILogic.URLMetadata.URLRetrievalStatus
+    public let rawValue: Swift.String
+    public static func == (a: FirebaseAILogic.URLMetadata.URLRetrievalStatus, b: FirebaseAILogic.URLMetadata.URLRetrievalStatus) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public let retrievedURL: Foundation.URL?
+  public let retrievalStatus: FirebaseAILogic.URLMetadata.URLRetrievalStatus
+  public static func == (a: FirebaseAILogic.URLMetadata, b: FirebaseAILogic.URLMetadata) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension FirebaseAILogic.URLMetadata : Swift.Decodable {
+  public init(from decoder: any Swift.Decoder) throws
+}
+extension FirebaseAILogic.FinishReason : Swift.Decodable {}
+extension FirebaseAILogic.PromptFeedback.BlockReason : Swift.Decodable {}
+extension FirebaseAILogic.ImageConfig.AspectRatio : Swift.Encodable {}
+extension FirebaseAILogic.ImageConfig.ImageSize : Swift.Encodable {}
+@available(*, deprecated, message: "All Imagen models are deprecated and will shut down as early as June 2026. As a replacement, you can migrate your apps to use Gemini Image models (the \"Nano Banana\" models).")
+extension FirebaseAILogic.ImagenPersonFilterLevel : Swift.Sendable {}
+extension FirebaseAILogic.ContentModality : Swift.Decodable {}
+extension FirebaseAILogic.ResponseModality : Swift.Encodable {}
+extension FirebaseAILogic.SafetyRating.HarmProbability : Swift.Decodable {}
+extension FirebaseAILogic.SafetyRating.HarmSeverity : Swift.Decodable {}
+extension FirebaseAILogic.SafetySetting.HarmBlockMethod : Swift.Encodable {}
+extension FirebaseAILogic.HarmCategory : Swift.Encodable {}
+extension FirebaseAILogic.HarmCategory : Swift.Decodable {}
+extension FirebaseAILogic.Schema.StringFormat : Swift.Encodable {}
+extension FirebaseAILogic.Schema.StringFormat : Swift.Sendable {}
+extension FirebaseAILogic.Schema.IntegerFormat : Swift.Encodable {}
+extension FirebaseAILogic.ThinkingConfig.ThinkingLevel : Swift.Encodable {}
+extension FirebaseAILogic.ThinkingConfig.ThinkingLevel : Swift.Sendable {}
+extension FirebaseAILogic.URLMetadata.URLRetrievalStatus : Swift.Decodable {}
+extension FirebaseAILogic.URLMetadata.URLRetrievalStatus : Swift.Sendable {}

@@ -1,0 +1,68 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 6.2.3 effective-5.10 (swiftlang-6.2.3.3.21 clang-1700.6.3.2)
+// swift-module-flags: -target arm64-apple-tvos15.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -enable-experimental-feature DebugDescriptionMacro -enable-bare-slash-regex -module-name FirebaseMLModelDownloader
+// swift-module-flags-ignorable: -no-verify-emitted-module-interface -formal-cxx-interoperability-mode=off -interface-compiler-version 6.2.3
+import FirebaseCore
+import FirebaseInstallations
+@_exported import FirebaseMLModelDownloader
+import Foundation
+import Swift
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+public struct CustomModel : Swift.Hashable {
+  public let name: Swift.String
+  public let size: Swift.Int
+  public let path: Swift.String
+  public let hash: Swift.String
+  public static func == (a: FirebaseMLModelDownloader.CustomModel, b: FirebaseMLModelDownloader.CustomModel) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public struct ModelDownloadConditions {
+  public init(allowsCellularAccess: Swift.Bool = true)
+}
+public enum ModelDownloadType {
+  case localModel
+  case localModelUpdateInBackground
+  case latestModel
+  public static func == (a: FirebaseMLModelDownloader.ModelDownloadType, b: FirebaseMLModelDownloader.ModelDownloadType) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers public class ModelDownloader {
+  public static func modelDownloader() -> FirebaseMLModelDownloader.ModelDownloader
+  public static func modelDownloader(app: FirebaseCore.FirebaseApp) -> FirebaseMLModelDownloader.ModelDownloader
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func getModel(name modelName: Swift.String, downloadType: FirebaseMLModelDownloader.ModelDownloadType, conditions: FirebaseMLModelDownloader.ModelDownloadConditions, progressHandler: ((Swift.Float) -> Swift.Void)? = nil, completion: @escaping (Swift.Result<FirebaseMLModelDownloader.CustomModel, FirebaseMLModelDownloader.DownloadError>) -> Swift.Void)
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func listDownloadedModels(completion: @escaping (Swift.Result<Swift.Set<FirebaseMLModelDownloader.CustomModel>, FirebaseMLModelDownloader.DownloadedModelError>) -> Swift.Void)
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func deleteDownloadedModel(name modelName: Swift.String, completion: @escaping (Swift.Result<Swift.Void, FirebaseMLModelDownloader.DownloadedModelError>) -> Swift.Void)
+  #endif
+  @objc deinit
+}
+public enum DownloadError : Swift.Error, Swift.Equatable {
+  case notFound
+  case permissionDenied
+  case failedPrecondition
+  case resourceExhausted
+  case notEnoughSpace
+  case invalidArgument
+  case emptyModelName
+  case internalError(description: Swift.String)
+  public static func == (a: FirebaseMLModelDownloader.DownloadError, b: FirebaseMLModelDownloader.DownloadError) -> Swift.Bool
+}
+public enum DownloadedModelError : Swift.Error {
+  case notFound
+  case fileIOError(description: Swift.String)
+  case internalError(description: Swift.String)
+}
+extension FirebaseMLModelDownloader.ModelDownloadType : Swift.Equatable {}
+extension FirebaseMLModelDownloader.ModelDownloadType : Swift.Hashable {}
