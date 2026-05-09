@@ -47,5 +47,19 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleDefault</string>
+	<key>NSCameraUsageDescription</key>
+	<string>DIYMechanic uses your camera so you can snap a photo of a part on your vehicle and our AI mechanic can identify it and explain how it works.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>DIYMechanic uses your microphone to record short clips of the sound your vehicle is making so our AI mechanic can diagnose the likely issue.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>DIYMechanic can save diagnostic photos of your vehicle to your photo library for your own records.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>DIYMechanic can let you pick a photo of a vehicle part so our AI mechanic can identify it.</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>Allow tracking so DIYMechanic can measure the performance of ads that brought you here and keep the app free.</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 </dict>
 </plist>

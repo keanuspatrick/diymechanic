@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import TopBar from "@/components/TopBar";
 import { useState } from "react";
 import { ArrowRight, Wrench, Clock, DollarSign } from "lucide-react";
+import { funnel } from "@/lib/analytics";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ export default function Dashboard() {
 
   const start = (t: string) => {
     if (!t.trim()) return;
+    funnel.taskStarted(t.trim());
     navigate(`/guide?task=${encodeURIComponent(t.trim())}`);
   };
 
