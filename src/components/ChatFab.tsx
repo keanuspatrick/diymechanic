@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { MessageCircle, X, Send, Loader2 } from "lucide-react";
+import { MessageCircle, X, Send, Loader2, Mic, Camera, Square } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useVehicle } from "@/store/vehicle";
 import ReactMarkdown from "react-markdown";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { funnel } from "@/lib/analytics";
+import { requestMic, requestCameraStream, stopStream, blobToBase64 } from "@/lib/permissions";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -15,11 +18,17 @@ export default function ChatFab() {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Msg[]>([]);
   const [loading, setLoading] = useState(false);
+  const [recording, setRecording] = useState(false);
+  const [analyzing, setAnalyzing] = useState<null | "sound" | "photo">(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const recRef = useRef<{ rec: MediaRecorder; chunks: Blob[]; stream: MediaStream } | null>(null);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, loading]);
+
+  const openChat = () => { setOpen(true); funnel.chatOpened(); };
 
   const send = async () => {
     const text = input.trim();
@@ -28,7 +37,6 @@ export default function ChatFab() {
     const userMsg: Msg = { role: "user", content: text };
     setMessages((p) => [...p, userMsg]);
     setLoading(true);
-
     try {
       const resp = await fetch(CHAT_URL, {
         method: "POST",
@@ -36,39 +44,28 @@ export default function ChatFab() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
         },
-        body: JSON.stringify({
-          messages: [...messages, userMsg],
-          vehicle,
-        }),
+        body: JSON.stringify({ messages: [...messages, userMsg], vehicle }),
       });
-
       if (!resp.ok || !resp.body) {
-        if (resp.status === 429) toast.error("Rate limit reached. Try again shortly.");
-        else if (resp.status === 402) toast.error("AI credits exhausted. Add funds in Lovable.");
-        else toast.error("Chat failed. Try again.");
+        if (resp.status === 429) toast.error("Rate limit reached.");
+        else if (resp.status === 402) toast.error("AI credits exhausted.");
+        else toast.error("Chat failed.");
         setLoading(false);
         return;
       }
-
       const reader = resp.body.getReader();
       const decoder = new TextDecoder();
-      let buffer = "";
-      let assistant = "";
-      let done = false;
-
+      let buffer = "", assistant = "", done = false;
       const upsert = (chunk: string) => {
         assistant += chunk;
         setMessages((prev) => {
           const last = prev[prev.length - 1];
           if (last?.role === "assistant") {
-            return prev.map((m, i) =>
-              i === prev.length - 1 ? { ...m, content: assistant } : m,
-            );
+            return prev.map((m, i) => (i === prev.length - 1 ? { ...m, content: assistant } : m));
           }
           return [...prev, { role: "assistant", content: assistant }];
         });
       };
-
       while (!done) {
         const { done: d, value } = await reader.read();
         if (d) break;
@@ -86,25 +83,133 @@ export default function ChatFab() {
             const parsed = JSON.parse(json);
             const c = parsed.choices?.[0]?.delta?.content;
             if (c) upsert(c);
-          } catch {
-            buffer = line + "\n" + buffer;
-            break;
-          }
+          } catch { buffer = line + "\n" + buffer; break; }
         }
       }
     } catch (e) {
       console.error(e);
-      toast.error("Connection issue. Check your network.");
+      toast.error("Connection issue.");
     } finally {
       setLoading(false);
     }
   };
 
+  const ensureVehicle = () => {
+    if (!vehicle) {
+      toast.error("Pick your vehicle first so I can be specific.");
+      return false;
+    }
+    return true;
+  };
+
+  // Sound diagnosis (microphone)
+  const startRecording = async () => {
+    if (!ensureVehicle()) return;
+    const stream = await requestMic();
+    if (!stream) {
+      toast.error("Microphone access denied. Enable it in Settings.");
+      return;
+    }
+    try {
+      const rec = new MediaRecorder(stream, { mimeType: "audio/webm" });
+      const chunks: Blob[] = [];
+      rec.ondataavailable = (e) => e.data.size && chunks.push(e.data);
+      rec.start();
+      recRef.current = { rec, chunks, stream };
+      setRecording(true);
+    } catch (e) {
+      console.error(e);
+      stopStream(stream);
+      toast.error("Could not start recording on this device.");
+    }
+  };
+
+  const stopRecording = async () => {
+    const ref = recRef.current;
+    if (!ref) return;
+    setRecording(false);
+    setAnalyzing("sound");
+    await new Promise<void>((resolve) => {
+      ref.rec.onstop = () => resolve();
+      ref.rec.stop();
+    });
+    stopStream(ref.stream);
+    const blob = new Blob(ref.chunks, { type: "audio/webm" });
+    recRef.current = null;
+    try {
+      const base64 = await blobToBase64(blob);
+      const dataUrl = `data:audio/webm;base64,${base64}`;
+      setMessages((p) => [...p, { role: "user", content: "🎙️ *Recorded engine sound for diagnosis*" }]);
+      const { data, error } = await supabase.functions.invoke("vehicle-analyze", {
+        body: { mode: "sound", dataUrl, vehicle },
+      });
+      if (error || data?.error) {
+        toast.error(data?.error || error?.message || "Sound analysis failed");
+        funnel.soundAnalyzed(false);
+      } else {
+        setMessages((p) => [...p, { role: "assistant", content: data.text }]);
+        funnel.soundAnalyzed(true);
+      }
+    } catch (e) {
+      console.error(e);
+      toast.error("Sound analysis failed");
+      funnel.soundAnalyzed(false);
+    } finally {
+      setAnalyzing(null);
+    }
+  };
+
+  // Camera / photo (uses native file input with capture for iOS permission prompt)
+  const triggerCamera = async () => {
+    if (!ensureVehicle()) return;
+    // Probe permission so iOS shows the prompt before opening the picker.
+    const probe = await requestCameraStream();
+    stopStream(probe);
+    fileRef.current?.click();
+  };
+
+  const onPhoto = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    setAnalyzing("photo");
+    try {
+      const base64 = await blobToBase64(file);
+      const dataUrl = `data:${file.type || "image/jpeg"};base64,${base64}`;
+      setMessages((p) => [...p, { role: "user", content: "📷 *Photo of vehicle part*" }]);
+      const { data, error } = await supabase.functions.invoke("vehicle-analyze", {
+        body: { mode: "photo", dataUrl, vehicle },
+      });
+      if (error || data?.error) {
+        toast.error(data?.error || error?.message || "Photo analysis failed");
+        funnel.photoAnalyzed(false);
+      } else {
+        setMessages((p) => [...p, { role: "assistant", content: data.text }]);
+        funnel.photoAnalyzed(true);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Photo analysis failed");
+      funnel.photoAnalyzed(false);
+    } finally {
+      setAnalyzing(null);
+    }
+  };
+
   return (
     <>
+      <input
+        ref={fileRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
+        className="hidden"
+        onChange={onPhoto}
+      />
+
       {!open && (
         <button
-          onClick={() => setOpen(true)}
+          onClick={openChat}
           aria-label="Open AI mechanic chat"
           style={{ bottom: "calc(1.25rem + env(safe-area-inset-bottom))", right: "calc(1.25rem + env(safe-area-inset-right))" }}
           className="fixed z-50 flex h-14 w-14 items-center justify-center rounded-full gradient-primary text-primary-foreground shadow-bold transition-transform hover:scale-105 active:scale-95"
@@ -115,76 +220,96 @@ export default function ChatFab() {
 
       {open && (
         <div className="fixed inset-x-0 bottom-0 z-50 pb-safe sm:inset-auto sm:bottom-5 sm:right-5 sm:w-[380px] sm:pb-0">
-          <div className="flex h-[78dvh] max-h-[600px] flex-col overflow-hidden rounded-t-2xl border border-border bg-card shadow-deep sm:rounded-2xl">
+          <div className="flex h-[78dvh] max-h-[640px] flex-col overflow-hidden rounded-t-2xl border border-border bg-card shadow-deep sm:rounded-2xl">
             <div className="flex items-center justify-between gradient-dark px-4 py-3 text-background">
               <div>
-                <div className="font-display text-base uppercase tracking-wide text-primary">
-                  AI Mechanic
-                </div>
+                <div className="font-display text-base uppercase tracking-wide text-primary">AI Mechanic</div>
                 <div className="text-xs text-background/70">
-                  {vehicle ? `${vehicle.year} ${vehicle.make} ${vehicle.model}` : "Ask anything vehicle-related"}
+                  {vehicle ? `${vehicle.year} ${vehicle.make} ${vehicle.model}` : "Pick your vehicle for specific help"}
                 </div>
               </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 text-background hover:bg-background/10 hover:text-background"
-                onClick={() => setOpen(false)}
-              >
+              <Button variant="ghost" size="icon" className="h-8 w-8 text-background hover:bg-background/10 hover:text-background" onClick={() => setOpen(false)}>
                 <X className="h-4 w-4" />
               </Button>
             </div>
 
             <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto p-4">
               {messages.length === 0 && (
-                <div className="rounded-xl bg-muted p-3 text-sm text-muted-foreground">
-                  Hey! Ask me anything about your vehicle — diagnosis, install advice, torque specs, you name it.
+                <div className="space-y-3">
+                  <div className="rounded-xl bg-muted p-3 text-sm text-muted-foreground">
+                    Ask anything about your vehicle. Or:
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="rounded-xl border border-border p-3 text-xs">
+                      <Mic className="mb-1 h-4 w-4 text-primary" />
+                      <div className="font-bold">Tap the ear</div>
+                      <div className="text-muted-foreground">Record a sound, get a diagnosis</div>
+                    </div>
+                    <div className="rounded-xl border border-border p-3 text-xs">
+                      <Camera className="mb-1 h-4 w-4 text-primary" />
+                      <div className="font-bold">Tap the camera</div>
+                      <div className="text-muted-foreground">Snap a part, get its name</div>
+                    </div>
+                  </div>
                 </div>
               )}
               {messages.map((m, i) => (
-                <div
-                  key={i}
-                  className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
-                >
-                  <div
-                    className={`max-w-[85%] rounded-2xl px-3.5 py-2 text-sm ${
-                      m.role === "user"
-                        ? "gradient-primary text-primary-foreground"
-                        : "bg-muted text-foreground"
-                    }`}
-                  >
+                <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+                  <div className={`max-w-[85%] rounded-2xl px-3.5 py-2 text-sm ${m.role === "user" ? "gradient-primary text-primary-foreground" : "bg-muted text-foreground"}`}>
                     {m.role === "assistant" ? (
                       <div className="prose prose-sm max-w-none prose-p:my-1 prose-ul:my-1 prose-ol:my-1 prose-li:my-0 prose-headings:my-1.5">
                         <ReactMarkdown>{m.content}</ReactMarkdown>
                       </div>
-                    ) : (
-                      m.content
-                    )}
+                    ) : m.content}
                   </div>
                 </div>
               ))}
-              {loading && messages[messages.length - 1]?.role === "user" && (
+              {(loading || analyzing) && (
                 <div className="flex justify-start">
                   <div className="rounded-2xl bg-muted px-3.5 py-2.5">
-                    <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      {analyzing === "sound" ? "Listening to your engine…" : analyzing === "photo" ? "Identifying the part…" : null}
+                    </div>
                   </div>
                 </div>
               )}
             </div>
 
-            <div className="flex gap-2 border-t border-border bg-background p-3">
+            <div className="flex items-center gap-2 border-t border-border bg-background p-3">
+              <Button
+                type="button"
+                size="icon"
+                variant={recording ? "destructive" : "outline"}
+                className="h-11 w-11 shrink-0"
+                onClick={recording ? stopRecording : startRecording}
+                disabled={!!analyzing}
+                aria-label={recording ? "Stop recording" : "Record engine sound"}
+                title="Diagnose by sound"
+              >
+                {recording ? <Square className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+              </Button>
+              <Button
+                type="button"
+                size="icon"
+                variant="outline"
+                className="h-11 w-11 shrink-0"
+                onClick={triggerCamera}
+                disabled={!!analyzing || recording}
+                aria-label="Identify a part by photo"
+                title="Identify a part"
+              >
+                <Camera className="h-4 w-4" />
+              </Button>
               <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && send()}
-                placeholder="Ask the mechanic…"
-                className="flex h-11 w-full rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                placeholder={recording ? "Recording…" : "Ask the mechanic…"}
+                disabled={recording || !!analyzing}
+                className="flex h-11 w-full rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-60"
               />
-              <Button
-                onClick={send}
-                disabled={!input.trim() || loading}
-                className="h-11 gradient-primary px-4 text-primary-foreground"
-              >
+              <Button onClick={send} disabled={!input.trim() || loading || recording || !!analyzing} className="h-11 gradient-primary px-4 text-primary-foreground">
                 <Send className="h-4 w-4" />
               </Button>
             </div>
