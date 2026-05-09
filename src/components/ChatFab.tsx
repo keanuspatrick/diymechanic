@@ -106,15 +106,16 @@ export default function ChatFab() {
         <button
           onClick={() => setOpen(true)}
           aria-label="Open AI mechanic chat"
-          className="fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full gradient-primary text-primary-foreground shadow-bold transition-transform hover:scale-105 active:scale-95"
+          style={{ bottom: "calc(1.25rem + env(safe-area-inset-bottom))", right: "calc(1.25rem + env(safe-area-inset-right))" }}
+          className="fixed z-50 flex h-14 w-14 items-center justify-center rounded-full gradient-primary text-primary-foreground shadow-bold transition-transform hover:scale-105 active:scale-95"
         >
           <MessageCircle className="h-6 w-6" />
         </button>
       )}
 
       {open && (
-        <div className="fixed inset-x-0 bottom-0 z-50 sm:inset-auto sm:bottom-5 sm:right-5 sm:w-[380px]">
-          <div className="flex h-[78vh] max-h-[600px] flex-col overflow-hidden rounded-t-2xl border border-border bg-card shadow-deep sm:rounded-2xl">
+        <div className="fixed inset-x-0 bottom-0 z-50 pb-safe sm:inset-auto sm:bottom-5 sm:right-5 sm:w-[380px] sm:pb-0">
+          <div className="flex h-[78dvh] max-h-[600px] flex-col overflow-hidden rounded-t-2xl border border-border bg-card shadow-deep sm:rounded-2xl">
             <div className="flex items-center justify-between gradient-dark px-4 py-3 text-background">
               <div>
                 <div className="font-display text-base uppercase tracking-wide text-primary">
