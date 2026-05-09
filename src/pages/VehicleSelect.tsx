@@ -13,6 +13,7 @@ import { useVehicle } from "@/store/vehicle";
 import { VEHICLE_MAKES, VEHICLE_YEARS } from "@/data/vehicles";
 import { Wrench, ArrowRight } from "lucide-react";
 import heroImg from "@/assets/hero-garage.jpg";
+import { funnel } from "@/lib/analytics";
 
 export default function VehicleSelect() {
   const navigate = useNavigate();
@@ -25,7 +26,9 @@ export default function VehicleSelect() {
 
   const handleStart = () => {
     if (!ready) return;
-    setVehicle({ year, make, model: model.trim() });
+    const v = { year, make, model: model.trim() };
+    setVehicle(v);
+    funnel.vehicleSelected(v);
     navigate("/dashboard");
   };
 

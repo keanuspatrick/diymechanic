@@ -11,6 +11,7 @@ import {
   CheckCircle2, Lightbulb, Loader2,
 } from "lucide-react";
 import { toast } from "sonner";
+import { funnel } from "@/lib/analytics";
 
 type Step = { title: string; details: string[]; tip?: string };
 type Guide = {
@@ -57,6 +58,7 @@ export default function GuidePage() {
       }
       setGuide(data.guide);
       setLoading(false);
+      funnel.guideViewed(task);
     })();
     return () => { cancelled = true; };
   }, [task, vehicle, navigate]);
