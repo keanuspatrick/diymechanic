@@ -39,6 +39,8 @@ export default function VehicleSelect() {
         alt="Open hood with tools laid out in a warm-lit garage"
         width={1920}
         height={1080}
+        fetchPriority="high"
+        decoding="async"
         className="absolute inset-0 h-full w-full object-cover"
       />
       <div className="absolute inset-0" style={{ background: "var(--gradient-hero)" }} />
@@ -46,7 +48,7 @@ export default function VehicleSelect() {
       <div className="relative z-10 mx-auto flex min-h-screen-safe max-w-2xl flex-col px-5 pb-10 pl-safe pr-safe pt-[calc(env(safe-area-inset-top)+3.5rem)]" style={{ paddingBottom: "calc(2.5rem + env(safe-area-inset-bottom))" }}>
         <div className="mb-10 flex items-center gap-3 text-primary-foreground">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl gradient-primary shadow-bold">
-            <Wrench className="h-6 w-6 origin-center animate-wrench-turn" />
+            <Wrench className="h-6 w-6" />
           </div>
           <div className="font-display text-2xl tracking-wide text-background">DIYMechanic</div>
         </div>

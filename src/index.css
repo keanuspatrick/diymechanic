@@ -87,13 +87,42 @@
 @layer base {
   * {
     @apply border-border;
+    -webkit-tap-highlight-color: transparent;
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "ss01", "cv11";
+    overscroll-behavior-y: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    touch-action: manipulation;
   }
   h1, h2, h3, h4 {
     @apply tracking-tight;
+  }
+  /* Smooth, momentum scroll on iOS for any scrollable container */
+  .overflow-y-auto, .overflow-auto, .overflow-y-scroll {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+  /* Honor reduced-motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+  /* Disable expensive hover transforms on touch devices to keep taps snappy */
+  @media (hover: none) {
+    .hover\:-translate-y-0\.5:hover { transform: none !important; }
+    .hover\:scale-105:hover { transform: none !important; }
   }
 }
 
