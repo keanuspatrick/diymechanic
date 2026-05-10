@@ -81,17 +81,10 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
-        "wrench-turn": {
-          "0%, 60%, 100%": { transform: "rotate(0deg)" },
-          "70%": { transform: "rotate(-35deg)" },
-          "80%": { transform: "rotate(20deg)" },
-          "90%": { transform: "rotate(-10deg)" },
-        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "wrench-turn": "wrench-turn 3.2s ease-in-out infinite",
       },
     },
   },
