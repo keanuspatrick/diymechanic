@@ -4,7 +4,7 @@ import { POPULAR_TASKS } from "@/data/vehicles";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import TopBar from "@/components/TopBar";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ArrowRight, Wrench, Clock, DollarSign } from "lucide-react";
 import { funnel } from "@/lib/analytics";
 
@@ -13,16 +13,18 @@ export default function Dashboard() {
   const vehicle = useVehicle((s) => s.vehicle);
   const [task, setTask] = useState("");
 
-  if (!vehicle) {
-    navigate("/", { replace: true });
-    return null;
-  }
+  useEffect(() => {
+    if (!vehicle) navigate("/", { replace: true });
+  }, [vehicle, navigate]);
 
-  const start = (t: string) => {
-    if (!t.trim()) return;
-    funnel.taskStarted(t.trim());
-    navigate(`/guide?task=${encodeURIComponent(t.trim())}`);
-  };
+  const start = useCallback((t: string) => {
+    const trimmed = t.trim();
+    if (!trimmed) return;
+    funnel.taskStarted(trimmed);
+    navigate(`/guide?task=${encodeURIComponent(trimmed)}`);
+  }, [navigate]);
+
+  if (!vehicle) return null;
 
   return (
     <div className="min-h-screen bg-background">
