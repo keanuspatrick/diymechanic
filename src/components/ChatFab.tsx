@@ -102,9 +102,10 @@ export default function ChatFab() {
     return true;
   };
 
-  // Sound diagnosis (microphone)
+  // Sound diagnosis (microphone) — standalone FAB
   const startRecording = async () => {
     if (!ensureVehicle()) return;
+    if (analyzing || recording) return;
     const stream = await requestMic();
     if (!stream) {
       toast.error("Microphone access denied. Enable it in Settings.");
@@ -117,6 +118,7 @@ export default function ChatFab() {
       rec.start();
       recRef.current = { rec, chunks, stream };
       setRecording(true);
+      toast("Listening… tap the ear again to stop", { duration: 4000 });
     } catch (e) {
       console.error(e);
       stopStream(stream);
@@ -129,6 +131,8 @@ export default function ChatFab() {
     if (!ref) return;
     setRecording(false);
     setAnalyzing("sound");
+    setOpen(true);
+    funnel.chatOpened();
     await new Promise<void>((resolve) => {
       ref.rec.onstop = () => resolve();
       ref.rec.stop();
@@ -159,10 +163,10 @@ export default function ChatFab() {
     }
   };
 
-  // Camera / photo (uses native file input with capture for iOS permission prompt)
+  // Camera / photo (standalone FAB)
   const triggerCamera = async () => {
     if (!ensureVehicle()) return;
-    // Probe permission so iOS shows the prompt before opening the picker.
+    if (analyzing || recording) return;
     const probe = await requestCameraStream();
     stopStream(probe);
     fileRef.current?.click();
@@ -173,6 +177,8 @@ export default function ChatFab() {
     e.target.value = "";
     if (!file) return;
     setAnalyzing("photo");
+    setOpen(true);
+    funnel.chatOpened();
     try {
       const base64 = await blobToBase64(file);
       const dataUrl = `data:${file.type || "image/jpeg"};base64,${base64}`;
@@ -196,6 +202,9 @@ export default function ChatFab() {
     }
   };
 
+  const stackRight = "calc(1.25rem + env(safe-area-inset-right))";
+  const baseBottom = "calc(1.25rem + env(safe-area-inset-bottom))";
+
   return (
     <>
       <input
@@ -208,14 +217,41 @@ export default function ChatFab() {
       />
 
       {!open && (
-        <button
-          onClick={openChat}
-          aria-label="Open AI mechanic chat"
-          style={{ bottom: "calc(1.25rem + env(safe-area-inset-bottom))", right: "calc(1.25rem + env(safe-area-inset-right))" }}
-          className="fixed z-50 flex h-14 w-14 items-center justify-center rounded-full gradient-primary text-primary-foreground shadow-bold transition-transform hover:scale-105 active:scale-95"
+        <div
+          className="fixed z-50 flex flex-col items-end gap-3"
+          style={{ bottom: baseBottom, right: stackRight }}
         >
-          <MessageCircle className="h-6 w-6" />
-        </button>
+          {/* Ear / sound diagnosis */}
+          <button
+            onClick={recording ? stopRecording : startRecording}
+            disabled={!!analyzing}
+            aria-label={recording ? "Stop recording engine sound" : "Diagnose engine sound"}
+            title="Diagnose by sound"
+            className={`flex h-12 w-12 items-center justify-center rounded-full border border-border bg-card text-foreground shadow-soft transition-transform hover:scale-105 active:scale-95 disabled:opacity-60 ${recording ? "ring-2 ring-destructive animate-pulse" : ""}`}
+          >
+            {recording ? <Square className="h-5 w-5 text-destructive" /> : <Mic className="h-5 w-5" />}
+          </button>
+
+          {/* Camera / part identification */}
+          <button
+            onClick={triggerCamera}
+            disabled={!!analyzing || recording}
+            aria-label="Identify a part by photo"
+            title="Identify a part"
+            className="flex h-12 w-12 items-center justify-center rounded-full border border-border bg-card text-foreground shadow-soft transition-transform hover:scale-105 active:scale-95 disabled:opacity-60"
+          >
+            <Camera className="h-5 w-5" />
+          </button>
+
+          {/* Chat */}
+          <button
+            onClick={openChat}
+            aria-label="Open AI mechanic chat"
+            className="flex h-14 w-14 items-center justify-center rounded-full gradient-primary text-primary-foreground shadow-bold transition-transform hover:scale-105 active:scale-95"
+          >
+            <MessageCircle className="h-6 w-6" />
+          </button>
+        </div>
       )}
 
       {open && (
@@ -237,19 +273,7 @@ export default function ChatFab() {
               {messages.length === 0 && (
                 <div className="space-y-3">
                   <div className="rounded-xl bg-muted p-3 text-sm text-muted-foreground">
-                    Ask anything about your vehicle. Or:
-                  </div>
-                  <div className="grid grid-cols-2 gap-2">
-                    <div className="rounded-xl border border-border p-3 text-xs">
-                      <Mic className="mb-1 h-4 w-4 text-primary" />
-                      <div className="font-bold">Tap the ear</div>
-                      <div className="text-muted-foreground">Record a sound, get a diagnosis</div>
-                    </div>
-                    <div className="rounded-xl border border-border p-3 text-xs">
-                      <Camera className="mb-1 h-4 w-4 text-primary" />
-                      <div className="font-bold">Tap the camera</div>
-                      <div className="text-muted-foreground">Snap a part, get its name</div>
-                    </div>
+                    Ask anything about your vehicle. Close this chat to use the ear or camera buttons for sound and photo diagnosis.
                   </div>
                 </div>
               )}
@@ -277,39 +301,15 @@ export default function ChatFab() {
             </div>
 
             <div className="flex items-center gap-2 border-t border-border bg-background p-3">
-              <Button
-                type="button"
-                size="icon"
-                variant={recording ? "destructive" : "outline"}
-                className="h-11 w-11 shrink-0"
-                onClick={recording ? stopRecording : startRecording}
-                disabled={!!analyzing}
-                aria-label={recording ? "Stop recording" : "Record engine sound"}
-                title="Diagnose by sound"
-              >
-                {recording ? <Square className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
-              </Button>
-              <Button
-                type="button"
-                size="icon"
-                variant="outline"
-                className="h-11 w-11 shrink-0"
-                onClick={triggerCamera}
-                disabled={!!analyzing || recording}
-                aria-label="Identify a part by photo"
-                title="Identify a part"
-              >
-                <Camera className="h-4 w-4" />
-              </Button>
               <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && send()}
-                placeholder={recording ? "Recording…" : "Ask the mechanic…"}
-                disabled={recording || !!analyzing}
+                placeholder="Ask the mechanic…"
+                disabled={!!analyzing}
                 className="flex h-11 w-full rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-60"
               />
-              <Button onClick={send} disabled={!input.trim() || loading || recording || !!analyzing} className="h-11 gradient-primary px-4 text-primary-foreground">
+              <Button onClick={send} disabled={!input.trim() || loading || !!analyzing} className="h-11 gradient-primary px-4 text-primary-foreground">
                 <Send className="h-4 w-4" />
               </Button>
             </div>
