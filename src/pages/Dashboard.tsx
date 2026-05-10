@@ -79,7 +79,7 @@ export default function Dashboard() {
             <Card
               key={t}
               onClick={() => start(t)}
-              className="group cursor-pointer border border-border transition-all hover:-translate-y-0.5 hover:border-primary hover:shadow-bold"
+              className="group cursor-pointer border border-border transition-colors hover:border-primary active:scale-[0.99]"
             >
               <CardContent className="flex items-center justify-between p-4">
                 <span className="font-medium">{t}</span>
