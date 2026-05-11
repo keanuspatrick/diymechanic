@@ -6,7 +6,7 @@ import ReactMarkdown from "react-markdown";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { funnel } from "@/lib/analytics";
-import { requestMic, requestCameraStream, stopStream, blobToBase64 } from "@/lib/permissions";
+import { requestMic, stopStream, blobToBase64, captureNativePhoto, isNative } from "@/lib/permissions";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
