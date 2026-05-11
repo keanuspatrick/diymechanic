@@ -163,13 +163,48 @@ export default function ChatFab() {
     }
   };
 
-  // Camera / photo (standalone FAB)
-  const triggerCamera = async () => {
+  // Camera / photo (standalone FAB) — must run synchronously on tap for iOS
+  const triggerCamera = () => {
     if (!ensureVehicle()) return;
     if (analyzing || recording) return;
-    const probe = await requestCameraStream();
-    stopStream(probe);
+    if (isNative()) {
+      // Native iOS/Android — use Capacitor Camera plugin (prompts for permission)
+      void runNativeCapture();
+      return;
+    }
+    // Web — open the file picker with capture hint, synchronously
     fileRef.current?.click();
+  };
+
+  const runNativeCapture = async () => {
+    setAnalyzing("photo");
+    setOpen(true);
+    funnel.chatOpened();
+    try {
+      const dataUrl = await captureNativePhoto();
+      if (!dataUrl) {
+        toast.error("Camera access denied. Enable it in Settings.");
+        funnel.photoAnalyzed(false);
+        return;
+      }
+      setMessages((p) => [...p, { role: "user", content: "📷 *Photo of vehicle part*" }]);
+      const { data, error } = await supabase.functions.invoke("vehicle-analyze", {
+        body: { mode: "photo", dataUrl, vehicle },
+      });
+      if (error || data?.error) {
+        toast.error(data?.error || error?.message || "Photo analysis failed");
+        funnel.photoAnalyzed(false);
+      } else {
+        setMessages((p) => [...p, { role: "assistant", content: data.text }]);
+        funnel.photoAnalyzed(true);
+      }
+    } catch (e) {
+      console.error(e);
+      toast.error("Photo analysis failed");
+      funnel.photoAnalyzed(false);
+    } finally {
+      setAnalyzing(null);
+    }
   };
 
   const onPhoto = async (e: React.ChangeEvent<HTMLInputElement>) => {
